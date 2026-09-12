@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MM ATTAR | Premium Attar & Perfume</title>
+
+    <meta name="description"
+          content="MM ATTAR - Premium Attar and Perfume Collection">
+
+        <meta name="keywords"
+            content="MM ATTAR, attar, perfume, Ahmed Al Maghribi, Surrati, Ibrahim Al Qureshi, Ajmal, Amod, Bharuch, Gujarat">
+
+        <link id="canonicalLink" rel="canonical" href="./index.html">
+
+        <script id="productStructuredData" type="application/ld+json">{}</script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <script type="module" src="app.js"></script>
+</head>
+
+<body>
+
+<!-- ================= LOADER ================= -->
+
+<div id="loader" class="loader">
+    <div class="loader-logo">MM</div>
+    <div class="loader-text">MM ATTAR</div>
+</div>
+
+
+<!-- ================= AUTH ================= -->
+
+<section id="authSection" class="auth-section">
+
+    <div class="auth-box">
+
+        <div class="auth-brand">
+            <div class="logo-circle">MM</div>
+            <h1>MM ATTAR</h1>
+            <p>Premium Fragrance Collection</p>
+        </div>
+
+        <!-- LOGIN -->
+
+        <div id="loginForm" class="auth-form">
+
+            <h2>Welcome Back</h2>
+            <p class="form-subtitle">Login to continue shopping</p>
+
+            <div class="input-group">
+                <label>Email</label>
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Enter your email"
+                >
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+
+                <div class="password-box">
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Enter password"
+                    >
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        onclick="togglePassword('loginPassword')">
+                        👁
+                    </button>
+                </div>
+            </div>
+
+            <button
+                class="gold-btn full-btn"
+                onclick="loginUser()">
+                Login
+            </button>
+
+            <button
+                class="text-btn"
+                onclick="forgotPassword()">
+                Forgot Password?
+            </button>
+
+            <div class="auth-switch">
+                Don't have an account?
+                <button onclick="showRegister()">Create Account</button>
+            </div>
+
+        </div>
+
+
+        <!-- REGISTER -->
+
+        <div id="registerForm" class="auth-form hidden">
+
+            <h2>Create Account</h2>
+            <p class="form-subtitle">Join MM ATTAR</p>
+
+            <div class="input-group">
+                <label>Full Name</label>
+                <input
+                    type="text"
+                    id="registerName"
+                    placeholder="Your full name"
+                >
+            </div>
+
+            <div class="input-group">
+                <label>Mobile Number</label>
+                <input
+                    type="tel"
+                    id="registerPhone"
+                    placeholder="Your mobile number"
+                >
+            </div>
+
+            <div class="input-group">
+                <label>Email</label>
+                <input
+                    type="email"
+                    id="registerEmail"
+                    placeholder="Your email"
+                >
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+
+                <div class="password-box">
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        placeholder="Create password"
+                    >
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        onclick="togglePassword('registerPassword')">
+                        👁
+                    </button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Confirm Password</label>
+
+                <input
+                    type="password"
+                    id="registerConfirm"
+                    placeholder="Confirm password"
+                >
+            </div>
+
+            <button
+                class="gold-btn full-btn"
+                onclick="registerUser()">
+                Create Account
+            </button>
+
+            <div class="auth-switch">
+                Already have an account?
+                <button onclick="showLogin()">Login</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= MAIN WEBSITE ================= -->
+
+<div id="mainWebsite" class="hidden">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="header-inner">
+
+            <a href="#" class="brand" onclick="showPage('home')">
+                <span class="brand-mark">MM</span>
+
+                <span>
+                    <strong>MM ATTAR</strong>
+                    <small>Premium Fragrance</small>
+                </span>
+            </a>
+
+
+            <nav class="desktop-nav">
+
+                <button onclick="showPage('home')">
+                    Home
+                </button>
+
+                <button onclick="showProducts('attar')">
+                    Attar
+                </button>
+
+                <button onclick="showProducts('perfume')">
+                    Perfume
+                </button>
+
+                <button onclick="showPage('about')">
+                    About Us
+                </button>
+
+                <button onclick="showPage('contact')">
+                    Contact
+                </button>
+
+            </nav>
+
+
+            <div class="header-actions">
+
+                <button
+                    class="icon-btn"
+                    onclick="openSearch()"
+                    title="Search">
+                    🔍
+                </button>
+
+                <button
+                    class="icon-btn cart-icon"
+                    onclick="showPage('cart')"
+                    title="Cart">
+
+                    🛒
+
+                    <span id="cartCount">0</span>
+
+                </button>
+
+                <button
+                    class="profile-btn"
+                    onclick="showPage('account')">
+
+                    <span id="headerUserName">Account</span>
+
+                </button>
+
+                <button
+                    class="menu-btn"
+                    onclick="toggleMobileMenu()">
+                    ☰
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- MOBILE MENU -->
+
+        <div id="mobileMenu" class="mobile-menu">
+
+            <button onclick="showPage('home');toggleMobileMenu()">
+                Home
+            </button>
+
+            <button onclick="showProducts('attar');toggleMobileMenu()">
+                Attar
+            </button>
+
+            <button onclick="showProducts('perfume');toggleMobileMenu()">
+                Perfume
+            </button>
+
+            <button onclick="showPage('about');toggleMobileMenu()">
+                About Us
+            </button>
+
+            <button onclick="showPage('contact');toggleMobileMenu()">
+                Contact
+            </button>
+
+            <button onclick="showPage('account');toggleMobileMenu()">
+                My Account
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= SEARCH ================= -->
+
+    <div id="searchPanel" class="search-panel">
+
+        <div class="search-inner">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search Attar or Perfume..."
+                oninput="searchProducts(this.value)"
+            >
+
+            <button onclick="closeSearch()">✕</button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= PAGES ================= -->
+
+    <main>
+
+
+        <!-- HOME -->
+
+        <section id="homePage" class="page">
+
+            <section class="hero">
+
+                <div class="hero-overlay"></div>
+
+                <div class="hero-content">
+
+                    <span class="hero-small">
+                        MM ATTAR PRESENTS
+                    </span>
+
+                    <h1>
+                        Discover Your
+                        <span>Signature Fragrance</span>
+                    </h1>
+
+                    <p>
+                        Premium Attar & Perfume collection
+                        crafted for your unique personality.
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <button
+                            class="gold-btn"
+                            onclick="showProducts('attar')">
+                            Shop Attar
+                        </button>
+
+                        <button
+                            class="outline-btn"
+                            onclick="showProducts('perfume')">
+                            Shop Perfume
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- CATEGORY -->
+
+            <section class="section">
+
+                <div class="section-heading">
+
+                    <span>EXPLORE COLLECTION</span>
+
+                    <h2>Choose Your Fragrance</h2>
+
+                    <p>
+                        Discover our premium selection of Attar
+                        and Perfumes.
+                    </p>
+
+                </div>
+
+
+                <div class="category-grid">
+
+                    <div
+                        class="category-card attar-category"
+                        onclick="showProducts('attar')">
+
+                        <div class="category-overlay"></div>
+
+                        <div class="category-content">
+
+                            <span>PURE FRAGRANCE</span>
+
+                            <h3>ATTAR</h3>
+
+                            <p>
+                                Traditional concentrated
+                                fragrance oils.
+                            </p>
+
+                            <button>
+                                Explore Attar →
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="category-card perfume-category"
+                        onclick="showProducts('perfume')">
+
+                        <div class="category-overlay"></div>
+
+                        <div class="category-content">
+
+                            <span>MODERN LUXURY</span>
+
+                            <h3>PERFUME</h3>
+
+                            <p>
+                                Elegant fragrances for
+                                every occasion.
+                            </p>
+
+                            <button>
+                                Explore Perfume →
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="section brand-section">
+
+                <div class="section-heading">
+                    <span>SHOP BY BRAND</span>
+                    <h2>Find Your House of Fragrance</h2>
+                    <p>Browse attars and perfumes by the brands you love.</p>
+                </div>
+
+                <div id="brandCards" class="brand-grid"></div>
+
+            </section>
+
+
+            <!-- FEATURED -->
+
+            <section class="section dark-section">
+
+                <div class="section-heading">
+
+                    <span>OUR COLLECTION</span>
+
+                    <h2>Featured Products</h2>
+
+                    <p>
+                        Handpicked fragrances from MM ATTAR.
+                    </p>
+
+                </div>
+
+                <div
+                    id="featuredProducts"
+                    class="product-grid">
+                </div>
+
+            </section>
+
+
+            <!-- WHY CHOOSE -->
+
+            <section class="section">
+
+                <div class="section-heading">
+
+                    <span>WHY MM ATTAR</span>
+
+                    <h2>Fragrance You Can Trust</h2>
+
+                </div>
+
+
+                <div class="features-grid">
+
+                    <div class="feature-card">
+                        <div class="feature-icon">✦</div>
+                        <h3>Premium Quality</h3>
+                        <p>
+                            Carefully selected fragrances
+                            for a premium experience.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">◆</div>
+                        <h3>Long Lasting</h3>
+                        <p>
+                            Beautiful fragrances designed
+                            to stay with you.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">✓</div>
+                        <h3>Trusted Service</h3>
+                        <p>
+                            Customer satisfaction is our
+                            priority.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">♡</div>
+                        <h3>Made For You</h3>
+                        <p>
+                            Fragrances for every mood and
+                            occasion.
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- REVIEWS -->
+
+            <section class="section dark-section">
+
+                <div class="section-heading">
+
+                    <span>CUSTOMER LOVE</span>
+
+                    <h2>What Our Customers Say</h2>
+
+                </div>
+
+
+                <div class="reviews-grid">
+
+                    <div class="review-card">
+                        <div class="stars">★★★★★</div>
+                        <p>
+                            "Amazing fragrance quality and
+                            beautiful packaging."
+                        </p>
+                        <strong>MM ATTAR Customer</strong>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="stars">★★★★★</div>
+                        <p>
+                            "The fragrance collection is
+                            excellent."
+                        </p>
+                        <strong>MM ATTAR Customer</strong>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="stars">★★★★★</div>
+                        <p>
+                            "Very good service and premium
+                            fragrances."
+                        </p>
+                        <strong>MM ATTAR Customer</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- HOME CONTACT -->
+
+            <section class="contact-banner">
+
+                <div>
+
+                    <span>NEED HELP?</span>
+
+                    <h2>
+                        Find Your Perfect Fragrance
+                    </h2>
+
+                    <p>
+                        Contact MM ATTAR for product
+                        information and orders.
+                    </p>
+
+                </div>
+
+                <div class="contact-buttons">
+
+                    <a
+                        href="https://wa.me/916351476671"
+                        target="_blank"
+                        class="gold-btn">
+                        WhatsApp
+                    </a>
+
+                    <a
+                        href="https://instagram.com/mm_attar_1936"
+                        target="_blank"
+                        class="outline-btn">
+                        Instagram
+                    </a>
+
+                </div>
+
+            </section>
+
+        </section>
+
+
+        <!-- PRODUCTS -->
+
+        <section id="productsPage" class="page hidden">
+
+            <div class="page-header">
+
+                <div>
+                    <span id="productPageSmall">
+                        COLLECTION
+                    </span>
+
+                    <h1 id="productPageTitle">
+                        Products
+                    </h1>
+                </div>
+
+            </div>
+
+
+            <div class="filter-bar">
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="productSearch"
+                        placeholder="Search products..."
+                        oninput="filterProducts()"
+                    >
+
+                </div>
+
+
+                <select
+                    id="priceFilter"
+                    onchange="filterProducts()">
+
+                    <option value="all">
+                        All Prices
+                    </option>
+
+                    <option value="0-500">
+                        Under ₹500
+                    </option>
+
+                    <option value="500-1000">
+                        ₹500 - ₹1000
+                    </option>
+
+                    <option value="1000+">
+                        ₹1000+
+                    </option>
+
+                </select>
+
+
+                <select
+                    id="stockFilter"
+                    onchange="filterProducts()">
+
+                    <option value="all">
+                        All
+                    </option>
+
+                    <option value="in">
+                        In Stock
+                    </option>
+
+                    <option value="out">
+                        Out of Stock
+                    </option>
+
+                </select>
+
+                <select
+                    id="brandFilter"
+                    onchange="filterProducts()">
+                    <option value="all">All Brands</option>
+                </select>
+
+                <select
+                    id="fragranceFilter"
+                    onchange="filterProducts()">
+                    <option value="all">All Notes</option>
+                </select>
+
+                <select
+                    id="sortProducts"
+                    onchange="filterProducts()">
+                    <option value="featured">Featured</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="name">Name: A to Z</option>
+                </select>
+
+            </div>
+
+
+            <div
+                id="productsGrid"
+                class="product-grid">
+            </div>
+
+        </section>
+
+
+        <section id="brandPage" class="page hidden">
+
+            <div class="brand-page-hero">
+                <img id="brandPageImage" src="./ahmed al magribi.jpg" alt="">
+                <div class="brand-page-overlay"></div>
+                <div class="brand-page-content">
+                    <span id="brandPageCategory">BRAND COLLECTION</span>
+                    <h1 id="brandPageTitle">Brand</h1>
+                    <p id="brandPageDescription"></p>
+                </div>
+            </div>
+
+            <div class="brand-page-toolbar">
+                <button class="outline-btn" onclick="showBrandProducts('all')">All</button>
+                <button class="outline-btn" onclick="showBrandProducts('attar')">Attar</button>
+                <button class="outline-btn" onclick="showBrandProducts('perfume')">Perfume</button>
+            </div>
+
+            <div id="brandProductsGrid" class="product-grid brand-products-grid"></div>
+
+        </section>
+
+
+        <!-- PRODUCT DETAILS -->
+
+        <section id="productDetailsPage" class="page hidden">
+
+            <div class="page-header">
+                <button class="outline-btn" onclick="goBackToCollection()">
+                    ← Back to Collection
+                </button>
+            </div>
+
+            <div
+                id="productDetails"
+                class="product-details">
+            </div>
+
+        </section>
+
+
+        <!-- CART -->
+
+        <section id="cartPage" class="page hidden">
+
+            <div class="page-header">
+
+                <div>
+
+                    <span>SHOPPING BAG</span>
+
+                    <h1>Your Cart</h1>
+
+                </div>
+
+            </div>
+
+
+            <div class="cart-layout">
+
+                <div id="cartItems" class="cart-items"></div>
+
+
+                <div class="cart-summary">
+
+                    <h2>Order Summary</h2>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <strong id="cartSubtotal">₹0</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Delivery</span>
+                        <strong id="cartDelivery">₹0</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Discount</span>
+                        <strong id="cartDiscount">₹0</strong>
+                    </div>
+
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <strong id="cartTotal">₹0</strong>
+                    </div>
+
+                    <button
+                        class="gold-btn full-btn"
+                        onclick="goCheckout()">
+                        Proceed to Checkout
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CHECKOUT -->
+
+        <section id="checkoutPage" class="page hidden">
+
+            <div class="page-header">
+
+                <div>
+
+                    <span>SECURE CHECKOUT</span>
+
+                    <h1>Checkout</h1>
+
+                </div>
+
+            </div>
+
+
+            <div class="checkout-layout">
+
+
+                <div class="checkout-form">
+
+                    <h2>Delivery Information</h2>
+
+                    <div class="two-inputs">
+
+                        <div class="input-group">
+                            <label>Full Name</label>
+
+                            <input
+                                id="checkoutName"
+                                type="text">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Mobile Number</label>
+
+                            <input
+                                id="checkoutPhone"
+                                type="tel">
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Email</label>
+
+                        <input
+                            id="checkoutEmail"
+                            type="email">
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Complete Address</label>
+
+                        <textarea
+                            id="checkoutAddress"
+                            rows="4"
+                            placeholder="House / Street / Area">
+                        </textarea>
+
+                    </div>
+
+
+                    <div class="three-inputs">
+
+                        <div class="input-group">
+                            <label>Area</label>
+                            <input id="checkoutArea">
+                        </div>
+
+                        <div class="input-group">
+                            <label>City</label>
+                            <input id="checkoutCity">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Pincode</label>
+                            <input id="checkoutPincode">
+                        </div>
+
+                    </div>
+
+
+                    <h2 class="checkout-heading">
+                        Payment Method
+                    </h2>
+
+
+                    <div class="payment-options">
+
+                        <label class="payment-option">
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="UPI"
+                                checked
+                                onchange="showPaymentInfo()">
+
+                            <span>
+                                <strong>UPI Payment</strong>
+                                <small>
+                                    Pay using UPI
+                                </small>
+                            </span>
+
+                        </label>
+
+
+                        <label
+                            id="codOption"
+                            class="payment-option">
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="COD"
+                                onchange="showPaymentInfo()">
+
+                            <span>
+                                <strong>Cash on Delivery</strong>
+                                <small>
+                                    Pay when your order arrives
+                                </small>
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div
+                        id="upiInfo"
+                        class="upi-box">
+
+                        <h3>Pay Using UPI</h3>
+
+                        <p>
+                            UPI ID:
+                            <strong id="checkoutUpiId">
+                                Add UPI ID from Admin
+                            </strong>
+                        </p>
+
+                        <div
+                            id="upiQrContainer"
+                            class="upi-qr">
+                        </div>
+
+                        <p class="small-text">
+                            After payment, place your order.
+                            Payment verification may be required.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="gold-btn full-btn large-btn"
+                        onclick="placeOrder()">
+                        Place Order
+                    </button>
+
+                </div>
+
+
+                <div class="checkout-summary">
+
+                    <h2>Your Order</h2>
+
+                    <div id="checkoutItems"></div>
+
+                    <hr>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <strong id="checkoutSubtotal">
+                            ₹0
+                        </strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Delivery</span>
+                        <strong id="checkoutDelivery">
+                            ₹0
+                        </strong>
+                    </div>
+
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <strong id="checkoutTotal">
+                            ₹0
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ORDER SUCCESS -->
+
+        <section id="orderSuccessPage" class="page hidden">
+
+            <div class="success-page">
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+                <span>THANK YOU</span>
+
+                <h1>Order Placed Successfully!</h1>
+
+                <p>
+                    Your MM ATTAR order has been received.
+                </p>
+
+                <div class="order-success-card">
+
+                    <p>Order ID</p>
+
+                    <h2 id="successOrderId">
+                        MM-000000
+                    </h2>
+
+                    <div id="successOrderDetails"></div>
+
+                </div>
+
+                <div class="success-buttons">
+
+                    <button
+                        class="gold-btn"
+                        onclick="showPage('account')">
+                        View My Orders
+                    </button>
+
+                    <button
+                        class="outline-btn"
+                        onclick="showPage('home')">
+                        Continue Shopping
+                    </button>
+
+                    <a
+                        id="whatsappOrderBtn"
+                        href="#"
+                        target="_blank"
+                        class="whatsapp-btn">
+                        Send Order on WhatsApp
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ACCOUNT -->
+
+        <section id="accountPage" class="page hidden">
+
+            <div class="page-header">
+
+                <div>
+                    <span>MY ACCOUNT</span>
+                    <h1>Account</h1>
+                </div>
+
+            </div>
+
+
+            <div class="account-layout">
+
+                <aside class="account-menu">
+
+                    <button
+                        class="active"
+                        onclick="accountTab('profile',this)">
+                        Profile
+                    </button>
+
+                    <button
+                        onclick="accountTab('orders',this)">
+                        My Orders
+                    </button>
+
+                    <button
+                        onclick="accountTab('wishlist',this)">
+                        Wishlist
+                    </button>
+
+                    <button
+                        onclick="accountTab('addresses',this)">
+                        Address
+                    </button>
+
+                    <button
+                        onclick="logoutUser()">
+                        Logout
+                    </button>
+
+                </aside>
+
+
+                <div class="account-content">
+
+                    <div
+                        id="profileTab"
+                        class="account-tab">
+
+                        <h2>My Profile</h2>
+
+                        <div class="profile-card">
+
+                            <div class="profile-avatar">
+                                <span id="profileInitial">M</span>
+                            </div>
+
+                            <div>
+
+                                <h3 id="profileName">
+                                    Customer
+                                </h3>
+
+                                <p id="profileEmail">
+                                    -
+                                </p>
+
+                                <p id="profilePhone">
+                                    -
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="wishlistTab"
+                        class="account-tab hidden">
+
+                        <h2>My Wishlist</h2>
+
+                        <div id="wishlistGrid" class="product-grid"></div>
+
+                    </div>
+
+
+                    <div
+                        id="ordersTab"
+                        class="account-tab hidden">
+
+                        <h2>My Orders</h2>
+
+                        <div id="myOrders"></div>
+
+                    </div>
+
+
+                    <div
+                        id="addressesTab"
+                        class="account-tab hidden">
+
+                        <h2>Saved Address</h2>
+
+                        <div id="savedAddress">
+                            No address saved yet.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ABOUT -->
+
+        <section id="aboutPage" class="page hidden">
+
+            <div class="page-header">
+
+                <div>
+                    <span>OUR STORY</span>
+                    <h1>About MM ATTAR</h1>
+                </div>
+
+            </div>
+
+            <div class="about-content">
+
+                <div class="about-logo">
+                    MM
+                </div>
+
+                <div>
+
+                    <h2>
+                        A Fragrance That Becomes
+                        Your Signature
+                    </h2>
+
+                    <p>
+                        MM ATTAR is a premium fragrance
+                        destination offering a carefully
+                        selected collection of Attar and
+                        Perfumes.
+                    </p>
+
+                    <p>
+                        Our goal is to provide beautiful,
+                        memorable fragrances with a focus
+                        on quality and customer satisfaction.
+                    </p>
+
+                    <p>
+                        Whether you prefer traditional Attar
+                        or modern Perfumes, MM ATTAR has
+                        something for every personality.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CONTACT -->
+
+        <section id="contactPage" class="page hidden">
+
+            <div class="page-header">
+
+                <div>
+                    <span>GET IN TOUCH</span>
+                    <h1>Contact MM ATTAR</h1>
+                </div>
+
+            </div>
+
+
+            <div class="contact-grid">
+
+                <div class="contact-card">
+
+                    <div class="contact-icon">⌂</div>
+
+                    <h3>Address</h3>
+
+                    <p>
+                        Gujarat Society, Amod,
+                        Dist. Bharuch, Gujarat
+                    </p>
+
+                </div>
+
+
+                <div class="contact-card">
+
+                    <div class="contact-icon">☎</div>
+
+                    <h3>WhatsApp</h3>
+
+                    <p>
+                        6351476671
+                    </p>
+
+                    <a
+                        href="https://wa.me/916351476671"
+                        target="_blank"
+                        class="gold-btn">
+                        Chat on WhatsApp
+                    </a>
+
+                </div>
+
+
+                <div class="contact-card">
+
+                    <div class="contact-icon">◎</div>
+
+                    <h3>Instagram</h3>
+
+                    <p>
+                        @mm_attar_1936
+                    </p>
+
+                    <a
+                        href="https://instagram.com/mm_attar_1936"
+                        target="_blank"
+                        class="gold-btn">
+                        Open Instagram
+                    </a>
+
+                </div>
+
+
+                <div class="contact-card">
+
+                    <div class="contact-icon">✉</div>
+
+                    <h3>Email</h3>
+
+                    <p>
+                        patelmasud8183@gmail.com
+                    </p>
+
+                    <a
+                        href="mailto:patelmasud8183@gmail.com"
+                        class="gold-btn">
+                        Email Us
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ADMIN ================= -->
+
+        <section id="adminPage" class="page hidden">
+
+            <div class="admin-header">
+
+                <div>
+                    <span>PRIVATE ADMIN PANEL</span>
+                    <h1>MM ATTAR Dashboard</h1>
+                </div>
+
+                <button
+                    class="outline-btn"
+                    onclick="showPage('home')">
+                    Store
+                </button>
+
+            </div>
+
+
+            <!-- ADMIN STATS -->
+
+            <div class="admin-stats">
+
+                <div class="admin-stat">
+                    <span>Total Orders</span>
+                    <strong id="adminOrders">0</strong>
+                </div>
+
+                <div class="admin-stat">
+                    <span>Today's Orders</span>
+                    <strong id="adminTodayOrders">0</strong>
+                </div>
+
+                <div class="admin-stat">
+                    <span>Total Sales</span>
+                    <strong id="adminSales">₹0</strong>
+                </div>
+
+                <div class="admin-stat">
+                    <span>Customers</span>
+                    <strong id="adminCustomers">0</strong>
+                </div>
+
+                <div class="admin-stat">
+                    <span>Attar Products</span>
+                    <strong id="adminAttar">0</strong>
+                </div>
+
+                <div class="admin-stat">
+                    <span>Perfume Products</span>
+                    <strong id="adminPerfume">0</strong>
+                </div>
+
+            </div>
+
+
+            <!-- ADMIN TABS -->
+
+            <div class="admin-tabs">
+
+                <button
+                    class="active"
+                    onclick="adminTab('adminOrdersTab',this)">
+                    Orders
+                </button>
+
+                <button
+                    onclick="adminTab('adminProductsTab',this)">
+                    Products
+                </button>
+
+                <button
+                    onclick="adminTab('adminBrandsTab',this)">
+                    Brands
+                </button>
+
+                <button
+                    onclick="adminTab('adminCustomersTab',this)">
+                    Customers
+                </button>
+
+                <button
+                    onclick="adminTab('adminSettingsTab',this)">
+                    Settings
+                </button>
+
+            </div>
+
+
+            <!-- ADMIN ORDERS -->
+
+            <div
+                id="adminOrdersTab"
+                class="admin-tab">
+
+                <div class="admin-toolbar">
+
+                    <input
+                        id="adminOrderSearch"
+                        placeholder="Search order / customer / mobile"
+                        oninput="renderAdminOrders()">
+
+                </div>
+
+                <div
+                    id="adminOrdersList"
+                    class="admin-table-wrapper">
+                </div>
+
+            </div>
+
+
+            <!-- ADMIN PRODUCTS -->
+
+            <div
+                id="adminProductsTab"
+                class="admin-tab hidden">
+
+                <div class="admin-toolbar">
+
+                    <h2>Product Management</h2>
+
+                    <button
+                        class="gold-btn"
+                        onclick="openProductForm()">
+                        + Add Product
+                    </button>
+
+                </div>
+
+                <div
+                    id="adminProductsList"
+                    class="admin-table-wrapper">
+                </div>
+
+            </div>
+
+
+            <div
+                id="adminBrandsTab"
+                class="admin-tab hidden">
+
+                <div class="admin-toolbar">
+                    <h2>Brand Management</h2>
+                </div>
+
+                <div class="settings-form brand-admin-form">
+                    <input id="brandEditId" type="hidden">
+                    <div class="two-inputs">
+                        <div class="input-group">
+                            <label>Brand Name</label>
+                            <input id="brandName" placeholder="Brand name">
+                        </div>
+                        <div class="input-group">
+                            <label>Logo Image URL</label>
+                            <input id="brandLogo" placeholder="https://...">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Banner Image URL</label>
+                        <input id="brandBanner" placeholder="https://...">
+                    </div>
+                    <div class="input-group">
+                        <label>Description</label>
+                        <textarea id="brandDescription" rows="3" placeholder="Short brand description"></textarea>
+                    </div>
+                    <label class="settings-checkbox">
+                        <input id="brandEnabled" type="checkbox" checked>
+                        Active brand
+                    </label>
+                    <button class="gold-btn" onclick="saveBrand()">Save Brand</button>
+                    <button class="outline-btn" onclick="clearBrandForm()">Clear</button>
+                </div>
+
+                <div id="adminBrandsList" class="admin-table-wrapper"></div>
+
+            </div>
+
+
+            <!-- ADMIN CUSTOMERS -->
+
+            <div
+                id="adminCustomersTab"
+                class="admin-tab hidden">
+
+                <h2>Customers</h2>
+
+                <div
+                    id="adminCustomersList"
+                    class="admin-table-wrapper">
+                </div>
+
+            </div>
+
+
+            <!-- ADMIN SETTINGS -->
+
+            <div
+                id="adminSettingsTab"
+                class="admin-tab hidden">
+
+                <h2>Business Settings</h2>
+
+                <div class="settings-form">
+
+                    <div class="input-group">
+                        <label>Business Name</label>
+                        <input id="settingBusinessName">
+                    </div>
+
+                    <div class="input-group">
+                        <label>WhatsApp Number</label>
+                        <input id="settingWhatsapp">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Instagram ID</label>
+                        <input id="settingInstagram">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input id="settingEmail">
+                    </div>
+
+                    <div class="input-group">
+                        <label>UPI ID</label>
+                        <input
+                            id="settingUpi"
+                            placeholder="example@upi">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Address</label>
+
+                        <textarea
+                            id="settingAddress"
+                            rows="3">
+                        </textarea>
+
+                    </div>
+
+                    <div class="input-group">
+                        <label>Delivery Charge</label>
+                        <input
+                            id="settingDelivery"
+                            type="number">
+                    </div>
+
+                    <div class="settings-checkbox">
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                id="settingCod">
+
+                            Enable Cash on Delivery
+
+                        </label>
+
+                    </div>
+
+                    <button
+                        class="gold-btn"
+                        onclick="saveSettings()">
+                        Save Settings
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="footer-grid">
+
+            <div class="footer-brand">
+
+                <div class="footer-logo">
+                    MM
+                </div>
+
+                <h2>MM ATTAR</h2>
+
+                <p>
+                    Premium Attar & Perfume collection
+                    for your signature fragrance.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3>Quick Links</h3>
+
+                <button onclick="showPage('home')">
+                    Home
+                </button>
+
+                <button onclick="showProducts('attar')">
+                    Attar
+                </button>
+
+                <button onclick="showProducts('perfume')">
+                    Perfume
+                </button>
+
+                <button onclick="showPage('about')">
+                    About Us
+                </button>
+
+                <button onclick="showPage('contact')">
+                    Contact
+                </button>
+
+            </div>
+
+
+            <div>
+
+                <h3>Contact</h3>
+
+                <p>
+                    Gujarat Society, Amod,
+                    Dist. Bharuch, Gujarat
+                </p>
+
+                <a
+                    href="https://wa.me/916351476671"
+                    target="_blank">
+                    WhatsApp: 6351476671
+                </a>
+
+                <a
+                    href="mailto:patelmasud8183@gmail.com">
+                    patelmasud8183@gmail.com
+                </a>
+
+            </div>
+
+
+            <div>
+
+                <h3>Follow Us</h3>
+
+                <a
+                    href="https://instagram.com/mm_attar_1936"
+                    target="_blank">
+                    Instagram
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 MM ATTAR. All Rights Reserved.
+            </p>
+
+            <p>
+                Premium Fragrance Collection
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- MOBILE BOTTOM NAV -->
+
+    <div class="mobile-bottom-nav">
+
+        <button onclick="showPage('home')">
+            <span>⌂</span>
+            Home
+        </button>
+
+        <button onclick="showProducts('attar')">
+            <span>✦</span>
+            Attar
+        </button>
+
+        <button onclick="showProducts('perfume')">
+            <span>◇</span>
+            Perfume
+        </button>
+
+        <button onclick="showPage('cart')">
+            <span>🛒</span>
+            Cart
+        </button>
+
+        <button onclick="showPage('account')">
+            <span>◯</span>
+            Account
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= PRODUCT MODAL ================= -->
+
+<div
+    id="productModal"
+    class="modal hidden">
+
+    <div class="modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeProductForm()">
+            ✕
+        </button>
+
+        <h2 id="productFormTitle">
+            Add Product
+        </h2>
+
+        <input
+            type="hidden"
+            id="editProductId">
+
+
+        <div class="input-group">
+
+            <label>Product Name</label>
+
+            <input
+                id="productName"
+                placeholder="Product name">
+
+        </div>
+
+
+        <div class="two-inputs">
+
+            <div class="input-group">
+
+                <label>Category</label>
+
+                <select id="productCategory">
+
+                    <option value="attar">
+                        Attar
+                    </option>
+
+                    <option value="perfume">
+                        Perfume
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>Brand</label>
+
+                <input
+                    id="productBrand"
+                    placeholder="Brand">
+
+            </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>Image URL</label>
+
+            <input
+                id="productImage"
+                placeholder="https://...">
+
+        </div>
+
+        <div class="input-group">
+            <label>Additional Image URLs</label>
+            <textarea id="productImageGallery" rows="3" placeholder="One image URL per line"></textarea>
+        </div>
+
+        <div class="input-group">
+            <label>Upload Product Images</label>
+            <input id="productImageFiles" type="file" accept="image/*" multiple>
+        </div>
+
+
+        <div class="input-group">
+
+            <label>Description</label>
+
+            <textarea
+                id="productDescription"
+                rows="3">
+            </textarea>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>Fragrance Notes</label>
+
+            <input
+                id="productNotes"
+                placeholder="Oud, Rose, Musk...">
+
+        </div>
+
+
+        <h3>Sizes & Prices</h3>
+
+        <div
+            id="productSizes"
+            class="product-size-inputs">
+
+            <div class="size-row">
+
+                <input
+                    class="size-name"
+                    value="6ML"
+                    placeholder="Size">
+
+                <input
+                    class="size-price"
+                    type="number"
+                    placeholder="Price">
+
+            </div>
+
+            <div class="size-row">
+
+                <input
+                    class="size-name"
+                    value="12ML"
+                    placeholder="Size">
+
+                <input
+                    class="size-price"
+                    type="number"
+                    placeholder="Price">
+
+            </div>
+
+            <div class="size-row">
+
+                <input
+                    class="size-name"
+                    value="25ML"
+                    placeholder="Size">
+
+                <input
+                    class="size-price"
+                    type="number"
+                    placeholder="Price">
+
+            </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>Stock</label>
+
+            <input
+                id="productStock"
+                type="number"
+                min="0"
+                value="10">
+
+        </div>
+
+        <div class="two-inputs">
+            <div class="input-group">
+                <label>Rating</label>
+                <input id="productRating" type="number" min="0" max="5" step="0.1" value="4.8">
+            </div>
+            <label class="settings-checkbox">
+                <input id="productFeatured" type="checkbox">
+                Featured product
+            </label>
+        </div>
+
+        <label class="settings-checkbox">
+            <input id="productEnabled" type="checkbox" checked>
+            Active product
+        </label>
+
+
+        <button
+            class="gold-btn full-btn"
+            onclick="saveProduct()">
+            Save Product
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
+
+<div id="toast" class="toast"></div>
+
+</body>
+</html>
