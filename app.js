@@ -477,26 +477,365 @@ const ahmedProductImages = [
     "White-TigerBottle.jpg", "Zeleny-box.jpg", "zeleny_7f596b25-5b0c-4a4e-b38b-eff1f65d1a20.jpg"
 ];
 
-const importedAhmedProducts = ahmedProductImages.map((filename, index) => {
-    const baseName = filename
+const ahmedProductMetadata = {
+    "oud-roses": { name: "OUD & ROSES", size: "75ML", price: 5200 },
+    "kaaf": { name: "KAAF 100ML H/B", size: "100ML", price: 3600 },
+    "summer-oud": { name: "SUMMER OUD 60ML H/B", size: "60ML", price: 3720 },
+    "marj": { name: "MARJ 60ML", size: "60ML", price: 6400 },
+    "blue-by-ahmed": { name: "BLUE BY AHMED 100ML H/B", size: "100ML", price: 3200 },
+    "ignite-oud": { name: "IGNITE OUD 60ML H/B", size: "60ML", price: 5200 },
+    "rose-noir": { name: "ROSE NOIR 75ML H/B", size: "75ML", price: 4400 },
+    "ahl": { name: "AHL 60ML", size: "60ML", price: 6400 },
+    "frost-ice": { name: "FROST ICE 100ML", size: "100ML", price: 2400 },
+    "aqua-oud": { name: "AQUA OUD 90ML H/B", size: "90ML", price: 4000 },
+    "kaaf-noir": { name: "KAAF NOIR", size: "100ML", price: 4000 },
+    "laathani": { name: "LAATHANI 80ML H/B", size: "80ML", price: 8000 },
+    "oud-classic": { name: "OUD CLASSIC 50ML", size: "50ML", price: 3200 },
+    "musk-roses": { name: "MUSK & ROSES 75ML H/B", size: "75ML", price: 4400 },
+    "ighraa": { name: "IGHRAA 100ML H/B", size: "100ML", price: 4000 },
+    "exotic": { name: "EXOTIC 100ML", size: "100ML", price: 3200 },
+    "oud-lavender": { name: "OUD LAVENDER 75ML H/B", size: "75ML", price: 5200 },
+    "musk-ahmed": { name: "MUSK AHMED", size: "100ML", price: 4000 },
+    "azure-royal": { name: "AZURE ROYAL 100ML H/B", size: "100ML", price: 3200 },
+    "bombay-oud": { name: "BOMBAY OUD 80ML", size: "80ML", price: 6800 },
+    "leather": { name: "LEATHER 50ML", size: "50ML", price: 3600 },
+    "mosaic": { name: "MOSAIC 100ML", size: "100ML", price: 3200 },
+    "couture-noir": { name: "COUTURE NOIR 100ML H/B", size: "100ML", price: 3200 },
+    "zeleny": { name: "ZELENY 100ML H/B", size: "100ML", price: 3200 },
+    "awfa": { name: "AWFA 60ML", size: "60ML", price: 9600 },
+    "endless": { name: "ENDLESS 100ML", size: "100ML", price: 3600 },
+    "peachy-peach": { name: "PEACHY PEACH 100ML", size: "100ML", price: 3200 },
+    "muzn": { name: "MUZN 100ML", size: "100ML", price: 4400 },
+    "bidun-esam": { name: "BIDUN ESAM 50ML", size: "50ML", price: 3600 },
+    "ignite-rose": { name: "IGNITE ROSE", size: "100ML", price: 5200 },
+    "moonlit": { name: "MOONLIT 100ML", size: "100ML", price: 3200 },
+    "oulil-amr": { name: "OULIL AMR 60ML H/B", size: "60ML", price: 12800 },
+    "jree": { name: "JREE", size: "100ML", price: 3200 },
+    "royal-cherry": { name: "ROYAL CHERRY 100ML H/B", size: "100ML", price: 4000 },
+    "musk-kashmiri": { name: "MUSK KASHMIRI", size: "100ML", price: 4000 },
+    "kawkab": { name: "KAWKAB 75ML H/B", size: "75ML", price: 8400 },
+    "dubai-chocolate": { name: "DUBAI CHOCOLATE", size: "100ML", price: 3200 },
+    "green-pearl": { name: "GREEN PEARL 80ML", size: "80ML", price: 3600 },
+    "joud": { name: "JOUD 100ML H/B", size: "100ML", price: 4000 },
+    "bloom-spectrum": { name: "BLOOM SPECTRUM", size: "100ML", price: 3600 },
+    "malyoon": { name: "MALYOON", size: "100ML", price: 3600 },
+    "oud-couture": { name: "OUD COUTURE 100ML H/B", size: "100ML", price: 3200 },
+    "hirfah": { name: "HIRFAH 75ML H/B", size: "75ML", price: 4800 },
+    "la-rosee": { name: "LA ROSEE", size: "100ML", price: 6800 },
+    "mystique-pink": { name: "MYSTIQUE PINK 100ML H/B", size: "100ML", price: 4000 },
+    "ruby": { name: "RUBY 100ML", size: "100ML", price: 2800 },
+    "kaffe-latte": { name: "KAFFE LATTE", size: "100ML", price: 3200 },
+    "aayah": { name: "AAYAH", size: "100ML", price: 7600 },
+    "white-tiger": { name: "WHITE TIGER", size: "100ML", price: 4800 },
+    "scentique-white": { name: "SCENTIQUE WHITE 100ML H/B", size: "100ML", price: 4000 },
+    "bin-shaikh": { name: "BIN SHAIKH", size: "100ML", price: 8000 }
+};
+
+const ahmedProductAliases = {
+    "41ebdxjslpl.-sl1500": "kaaf",
+    "61jmjzqwuil.-sl1500": "kaaf",
+    "untitled-design-2026-07-23t124013.462": "oud-roses",
+    "boumbay-oud": "bombay-oud",
+    "bloomsopectrumbox": "bloom-spectrum",
+    "bloomspectrumbottle": "bloom-spectrum",
+    "dubaichocolate": "dubai-chocolate",
+    "dubaichocolatebox": "dubai-chocolate",
+    "igniterosebottle": "ignite-rose",
+    "joud-100ml": "joud",
+    "jreebottle": "jree",
+    "kaafnoirbox": "kaaf-noir",
+    "kaffelattebox": "kaffe-latte",
+    "kaffelatte": "kaffe-latte",
+    "oud-clasic": "oud-classic",
+    "oulil": "oulil-amr",
+    "igniterose": "ignite-rose",
+    "blu-by-ahmed": "blue-by-ahmed",
+    "whitetigerbottle": "white-tiger"
+};
+
+function ahmedProductKey(filename) {
+    const key = filename
         .replace(/\.[^.]+$/, "")
-        .replace(/[-_]+/g, " ")
-        .replace(/\s+\d+$/, "")
-        .trim();
+        .replace(/_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i, "")
+        .replace(/(?:[-_](?:scaled|box|bottle|1|2|1-1))+$/i, "")
+        .replace(/[-_]+/g, "-")
+        .toLowerCase();
+
+    return ahmedProductAliases[key] || key;
+}
+
+const importedAhmedProducts = [...new Set(
+    ahmedProductImages.map(filename => ahmedProductKey(filename))
+)].map((productKey, index) => {
+    const metadata = ahmedProductMetadata[productKey] || {
+        name: "Ahmed Al Maghribi - Product name to be confirmed",
+        size: "100ML",
+        price: 3200
+    };
+    const imageFiles = ahmedProductImages.filter(
+        filename => ahmedProductKey(filename) === productKey
+    );
+    const firstImageIndex = ahmedProductImages.indexOf(imageFiles[0]);
 
     return {
-        id: `ahmed-al-maghribi-${index + 1}`,
-        name: baseName.replace(/\b\w/g, character => character.toUpperCase()),
+        id: `ahmed-al-maghribi-${firstImageIndex + 1}`,
+        name: metadata.name,
         category: "perfume",
         brand: "AHMED AL MAGHRIBI",
-        image: `${ahmedAssetFolder}${filename}`,
-        description: "Ahmed Al Maghribi fragrance. Price will be updated soon.",
+        image: `${ahmedAssetFolder}${imageFiles[0]}`,
+        images: imageFiles.map(filename => `${ahmedAssetFolder}${filename}`),
+        description: `${metadata.name} by Ahmed Al Maghribi.`,
         notes: "Premium fragrance",
-        sizes: [{ name: "50ML", price: 0 }],
+        sizes: [{ name: metadata.size, price: metadata.price }],
         stock: 20,
         enabled: true
     };
 });
+
+const importedAhmedProductsById = new Map(
+    importedAhmedProducts.map(product => [product.id, product])
+);
+
+const importedLocalProducts = [
+    [
+        "ibraheem-al-qureshi-blue-oud",
+        "Ibraheem Al Qurashi Blue Oud Eau De Parfum 100ml For Men & Women",
+        "4_0a33c2b9-e7b8-4d2f-a729-adb3904000c1.png",
+        3749,
+        "100ML"
+    ],
+    [
+        "ibraheem-al-qureshi-musk-kashmir",
+        "Ibraheem Al Qurashi Musk Kashmir Eau De Parfum 100ml For Men & Women",
+        "1_c57162cc-94d8-4dfe-8248-450a5480788f.png",
+        3899,
+        "100ML"
+    ],
+    [
+        "ibraheem-al-qureshi-black-diamond-incense",
+        "Ibraheem Al Qurashi Black Diamond Incense Eau De Parfum 150ml For Men",
+        "9_91ca5755-50e7-49f9-a99d-f1b682a23bc2.png",
+        4449,
+        "150ML"
+    ],
+    [
+        "ibraheem-al-qureshi-sandalwood",
+        "Ibraheem Al Qurashi Sandalwood Eau De Parfum 100ml For Man & Woman",
+        "7_12bc9f08-760c-4648-8615-892bcc201800.png",
+        4749,
+        "100ML"
+    ],
+    [
+        "ibraheem-al-qureshi-tobacco-discovery-set",
+        "Discovery Set Of Ibraheem Al Qurashi Tobacco Collection Eau De Parfum 20ML x 9 For Man",
+        "16_7bb5a775-ea9a-4533-b284-c8bede73a2ed.png",
+        9499,
+        "20ML x 9"
+    ],
+    [
+        "ibraheem-al-qureshi-cullinan-diamond-iris",
+        "Ibraheem Al Qurashi Cullinan Diamond Iris Extrait De Parfum 150ml For Men & Women",
+        "30_7afb6d22-5fd3-4cb9-af92-6334980a3e52.jpg",
+        4999,
+        "150ML"
+    ],
+    [
+        "ibraheem-al-qureshi-blue-diamond-aqua",
+        "Ibraheem Al Qurashi Blue Diamond Aqua Eau De Parfum 150ml For Men",
+        "1_4477d5fd-e500-4581-9a0d-7a143ae8d646.png",
+        5999,
+        "150ML"
+    ],
+    [
+        "ibraheem-al-qureshi-pink-diamond-sakura",
+        "Ibraheem Al Qurashi Pink Diamond Sakura Extrait De Parfum 150ml For Woman",
+        "15_f9b2167c-8575-41ad-88a2-2d09ccbb0d59.png",
+        4999,
+        "150ML"
+    ],
+    [
+        "ibraheem-al-qureshi-brazilian-tobacco",
+        "Ibraheem Al Qurashi Brazilian Tobacco Extrait De Parfum 100ml For Man & Woman",
+        "9_ebd9f57a-82f9-4974-8ba0-29c5eb942b74.png",
+        4499,
+        "100ML"
+    ],
+    [
+        "ibraheem-al-qureshi-dominican-tobacco",
+        "Ibraheem Al Qurashi Dominican Tobacco Extrait De Parfum 100ml For Man & Woman",
+        "30_5e8b7116-f9a3-4a37-b660-a9097f2d5d0f.png",
+        7449,
+        "100ML"
+    ],
+    [
+        "ibraheem-al-qureshi-white-regent-diamond",
+        "Ibraheem Al Qurashi White Regent Diamond Eau De Parfum 150ml For Men & Women",
+        "7_326f575a-3b2d-4c41-836f-4b2d8fe79242.png",
+        6249,
+        "150ML"
+    ],
+    [
+        "ibraheem-al-qureshi-greek-tobacco",
+        "Ibraheem Al Qurashi Greek Tobacco Extrait De Parfum 200ml For Men & Women",
+        "26_1864af5b-3a69-4c3a-855f-bf7505e3da27.png",
+        10249,
+        "200ML"
+    ],
+    [
+        "ibraheem-al-qureshi-french-tobacco",
+        "Ibraheem Al Qurashi French Tobacco Extrait De Parfum 200ml For Men & Women",
+        "Ibraheem_Al_Qurashi_French_Tobacco_Extrait_De_Parfum_200ml_For_Men_Women.jpg",
+        10249,
+        "200ML"
+    ],
+    [
+        "ibraheem-al-qureshi-abaq-pomegranate-musk",
+        "Ibraheem Al Qurashi Abaq Pomegranate Musk Eau De Parfum 75ml For Men & Women",
+        "5_449abf2c-ee0d-49bf-964d-efdcc2d99a5a.png",
+        3499,
+        "75ML"
+    ],
+    [
+        "ibraheem-al-qureshi-vintage-tobacco-gift-set",
+        "Gift Set Of Ibraheem Al Qurashi Vintage Tobacco Extrait De Parfum 100ml For Man",
+        "27_ea35e2b3-5938-4e27-8f72-7135d523b8f7.png",
+        7789,
+        "100ML"
+    ],
+    [
+        "ibraheem-al-qureshi-mexican-tobacco",
+        "Ibraheem Al Qurashi Mexican Tobacco Extrait De Parfum 100ml For Man & Woman",
+        "7_d00962a3-6116-443b-a09e-8ccf60051c4e.png",
+        4449,
+        "100ML"
+    ],
+    [
+        "ibraheem-al-qureshi-black-carbon-diamond",
+        "Ibraheem Al Qurashi Black Carbon Diamond Eau De Parfum 150ml For Men",
+        "2_8212391b-b80b-4429-85a8-465f408c6de3.png",
+        7499,
+        "150ML"
+    ],
+    [
+        "ibraheem-al-qureshi-dark-lavender",
+        "Ibraheem Al Qurashi Dark Lavender Eau De Parfum For Man & Woman",
+        "11_88875dc3-077a-439d-81d6-83a45d901f7b.png",
+        3699,
+        "100ML"
+    ],
+    [
+        "ibraheem-al-qureshi-emerald-soul-diamond",
+        "Ibraheem Al Qurashi Emerald Soul Diamond Eau De Parfum 150ml For Men & Women",
+        "3_87793e1e-e59f-4c7d-b6ec-f4550b7ebcb0.png",
+        6999,
+        "150ML"
+    ],
+    [
+        "ibraheem-al-qureshi-grey-pearl-diamond",
+        "Ibraheem Al Qurashi Grey Pearl Diamond Eau De Parfum 200ml For Men & Women",
+        "4_f7bd12d7-fa96-469f-9177-5e90251d6de5.png",
+        8499,
+        "200ML"
+    ],
+    [
+        "ibraheem-al-qureshi-iconic-oudh-tobacco",
+        "Ibraheem Al Qurashi Iconic Oudh Tobacco Eau De Parfum 100ml For Man & Woman",
+        "15_17b4b8e9-ea8c-40fe-8b34-cbdeb195e5e3.png",
+        7499,
+        "100ML"
+    ],
+    [
+        "ibraheem-al-qureshi-golden-amber",
+        "Ibraheem Al Qurashi Golden Amber Eau De Parfum 100ml For Men & Women",
+        "28_2f051e7d-e812-45b2-b26e-322035535aee.jpg",
+        4499,
+        "100ML"
+    ],
+    [
+        "ibraheem-al-qureshi-arabian-tobacco",
+        "Ibraheem Al Qurashi Arabian Tobacco Extrait De Parfum 100ml For Man & Woman",
+        "8_bbabdc6e-9ee9-4562-acb3-f9063d068561.png",
+        6349,
+        "100ML"
+    ],
+    [
+        "ibraheem-al-qureshi-malayan-lthr",
+        "Ibraheem Al Qurashi Malayan Lthr Eau De Parfum 75ml For Men & Women",
+        "11_c30324ac-799e-488e-b0cd-a2f8cad0e866.png",
+        3249,
+        "75ML"
+    ],
+    [
+        "ibraheem-al-qureshi-manta-lthr",
+        "Ibraheem Al Qurashi Manta LTHR Eau De Parfum 75ml For Men & Women",
+        "12_63bbf495-6f82-4319-a6d5-91cfe8f6ded8.png",
+        3249,
+        "75ML"
+    ],
+    [
+        "ibraheem-al-qureshi-riviera-sunset",
+        "Ibraheem Al Qurashi Riviera Sunset Eau De Parfum 100ml For Man & Woman",
+        "23_03ee7e31-1eb4-438c-9915-fc70ac52e73e.png",
+        3649,
+        "100ML"
+    ],
+    [
+        "ajmal-cyan-oud",
+        "Ajmal Cyan Oud Eau de Parfum 100ml",
+        "Ajmal-Cyan-Oud.jpg",
+        2299,
+        "100ML"
+    ],
+    [
+        "ajmal-white-oud",
+        "Ajmal White Oud Eau de Parfum 100ml",
+        "Ajmal-White-Oud.jpg",
+        1599,
+        "100ML"
+    ],
+    [
+        "ajmal-oud-nirvana",
+        "Ajmal Oud Nirvana Eau De Parfum 100ml",
+        "Ajmal-Oud-Nirvana.jpg",
+        1599,
+        "100ML"
+    ],
+    [
+        "ajmal-amber-wood",
+        "Ajmal Amber Wood Eau De Parfum 100ml",
+        "Ajmal-Amber-Wood.jpg",
+        11799,
+        "100ML"
+    ],
+    [
+        "ajmal-wave",
+        "Ajmal Wave Eau de Parfum for Men 100ml",
+        "Ajmal-Wave.jpg",
+        1399,
+        "100ML"
+    ]
+].map(([id, name, image, price, size]) => ({
+    id,
+    name,
+    category: "perfume",
+    brand: id.startsWith("ajmal-") ? "AJMAL" : "IBRAHEEM AL QURESHI",
+    image: id.startsWith("ajmal-")
+        ? `./Ajmal Cyan Oud Eau de Parfum 100ml – Perfumegyaan_files/${image}`
+        : `./Ibraheem Al Qurashi _ Perfume Palace_files/${image}`,
+    images: [id.startsWith("ajmal-")
+        ? `./Ajmal Cyan Oud Eau de Parfum 100ml – Perfumegyaan_files/${image}`
+        : `./Ibraheem Al Qurashi _ Perfume Palace_files/${image}`],
+    description: `${name} sourced from the official online listing.`,
+    notes: "Premium fragrance",
+    sizes: [{ name: size, price }],
+    stock: 20,
+    rating: 4.8,
+    enabled: true
+}));
+
+const importedLocalProductsById = new Map(
+    importedLocalProducts.map(product => [product.id, product])
+);
 
 const $ = id =>
     document.getElementById(id);
@@ -1083,6 +1422,32 @@ async function loadProducts() {
                                 defaultProduct
                                     ? defaultProduct.image
                                     : value.image
+                        };
+                    });
+
+                products = products
+                    .filter(product => !(
+                        product.brand === "AHMED AL MAGHRIBI" &&
+                        /^ahmed-al-maghribi-\d+$/.test(product.id) &&
+                        !importedAhmedProductsById.has(product.id)
+                    ))
+                    .map(product => {
+                        const importedProduct =
+                            importedAhmedProductsById.get(product.id);
+
+                        if (!importedProduct) return product;
+
+                        return {
+                            ...importedProduct,
+                            ...product,
+                            name: importedProduct.name,
+                            description: importedProduct.description,
+                            notes: importedProduct.notes,
+                            sizes: importedProduct.sizes,
+                            images: [...new Set([
+                                product.image,
+                                ...importedProduct.images
+                            ].filter(Boolean))]
                         };
                     });
 

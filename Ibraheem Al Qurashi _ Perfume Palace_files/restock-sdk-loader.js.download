@@ -1,0 +1,211 @@
+(function () {
+  window._ReStockConfig = window._ReStockConfig || {};
+
+  var metafields = window._ReStockConfig._metafields;
+  var metafieldConfigData = metafields ? metafields.sdkConfig : null;
+  var metafieldPreOrderData = metafields ? metafields.preOrderConfig : null;
+  var metafieldWishlistData = metafields ? metafields.wishlistConfig : null;
+  var metafieldFlagsData = metafields ? metafields.featureFlags : null;
+
+  delete window._ReStockConfig._metafields;
+
+  function loadSdkScript({ ignoreConditions = false } = {}) {
+    if (!ignoreConditions && !shouldLoadSdk()) return;
+
+    const restockSdkElement = document.createElement('script');
+    restockSdkElement.setAttribute('defer', 'defer');
+    restockSdkElement.src = "https://cdn.notify-me.io/sdk.js";
+    document.body.appendChild(restockSdkElement);
+  }
+
+  function shouldLoadSdk() {
+    const config = window._ReStockConfig;
+
+    if (!config.app_enabled || config.is_suspended) {
+      return false;
+    }
+
+    if (config.wishlist?.is_service_active) {
+      return true;
+    }
+
+    if (['collection', 'list-collections', 'search', 'page'].includes(config.templateName)) {
+      const collectionDisplayMode = config.ui_style?.notify_me_styles?.find(style => style.page === 'COLLECTION_PAGE')?.inline_display_mode;
+      const preOrderCollectionDisplayMode = config.pre_order?.collection_page?.ui_styles?.display_mode;
+
+      if ((!config.is_back_in_stock_active || collectionDisplayMode === 'NOT_DISPLAYED') &&
+        (!config.pre_order?.is_service_active || preOrderCollectionDisplayMode === 'NOT_DISPLAYED')) {
+        return false;
+      }
+    }
+
+    if (config.templateName === 'index') {
+      const landingDisplayMode = config.ui_style?.notify_me_styles?.find(style => style.page === 'LANDING_PAGES')?.inline_display_mode;
+      const preOrderLandingDisplayMode = config.pre_order?.landing_page?.ui_styles?.display_mode;
+
+      if ((!config.is_back_in_stock_active || landingDisplayMode === 'NOT_DISPLAYED') &&
+        (!config.pre_order?.is_service_active || preOrderLandingDisplayMode === 'NOT_DISPLAYED')) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function ensureWishlistPageContainer(sdkConfig) {
+    if (window.__nmWishlistPageContainer) {
+      window.__nmWishlistPageContainer.ensure(window._ReStockConfig.wishlist, sdkConfig);
+    }
+  }
+
+  function hashDomain(domain) {
+    let hash = 5381;
+    for (let i = 0; i < domain.length; i++) {
+      hash = ((hash << 5) + hash + domain.charCodeAt(i)) >>> 0;
+    }
+    return hash;
+  }
+
+  function assignGroup(shopifyDomain) {
+    const DOBBY_USAGE_PERCENTAGE = 0;
+    if (DOBBY_USAGE_PERCENTAGE <= 0) {
+      return "A";
+    } else if (DOBBY_USAGE_PERCENTAGE >= 100) {
+      return "B";
+    }
+    const hashValue = hashDomain(shopifyDomain);
+    const normalized = (hashValue / 0x100000000) * 100;
+    return normalized <= DOBBY_USAGE_PERCENTAGE ? "B" : "A";
+  }
+
+  try {
+
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const shopDomain = searchParams.get('SHOP_DOMAIN') || window.Shopify?.shop || window.location.host;
+
+      const abTestGroup = assignGroup(shopDomain);
+      window._ReStockConfig.ab_test_group = abTestGroup;
+
+      if (abTestGroup === "B") {
+        const dobbyApiUrl = `https://dobby.notify-me.app/sdk/${shopDomain}`;
+
+        fetch(dobbyApiUrl)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Dobby API returned status ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            const { wishlist, ...sdkConfig } = data;
+
+            if (!sdkConfig || !sdkConfig.shop_id) {
+              throw new Error('Invalid Dobby API response');
+            }
+
+            window._ReStockConfig.wishlist = wishlist ?? metafieldWishlistData;
+            ensureWishlistPageContainer(sdkConfig);
+            window._ReStockConfig = { ...window._ReStockConfig, ...sdkConfig };
+            loadSdkScript();
+          })
+          .catch(error => {
+            window._ReStockConfig.wishlist = metafieldWishlistData;
+            ensureWishlistPageContainer(metafieldConfigData);
+            window._ReStockConfig.pre_order = metafieldPreOrderData;
+            window._ReStockConfig.feature_flags = metafieldFlagsData;
+            window._ReStockConfig = { ...window._ReStockConfig, ...metafieldConfigData };
+            loadSdkScript({ ignoreConditions: !(metafieldConfigData && metafieldConfigData.shop_id) });
+          });
+      } else {
+        const hasSdkMetafield = metafieldConfigData && metafieldConfigData.shop_id;
+        const hasPreOrderMetafield = metafieldPreOrderData && typeof metafieldPreOrderData === 'object' && Object.keys(metafieldPreOrderData).length > 0;
+        const hasFlagsMetafield = metafieldFlagsData && typeof metafieldFlagsData === 'object';
+        const hasWishlistMetafield = metafieldWishlistData && typeof metafieldWishlistData === 'object' && Object.keys(metafieldWishlistData).length > 0;
+
+        const fallbackApiUrl = `https://api.notify-me.app/sdk/${shopDomain}`;
+        const preOrderFallbackApiUrl = `https://api.notify-me.app/pre-order/sdk/${shopDomain}`;
+        const flagsFallbackApiUrl = `https://api.notify-me.app/feature-flags/sdk/${shopDomain}`;
+        const wishlistFallbackApiUrl = `https://api.notify-me.app/wishlist/sdk/${shopDomain}`;
+
+        const fetchSdkConfig = () => {
+          return fetch(fallbackApiUrl)
+            .then(response => {
+              if (!response.ok) throw new Error(`SDK API returned status ${response.status}`);
+              return response.json();
+            })
+            .then(data => {
+              if (!data || !data.shop_id) throw new Error('Invalid SDK API response');
+              return data;
+            });
+        };
+
+        const fetchPreOrderConfig = () => {
+          return fetch(preOrderFallbackApiUrl)
+            .then(response => {
+              if (!response.ok) throw new Error(`Pre-order API returned status ${response.status}`);
+              return response.json();
+            });
+        };
+
+        const fetchFlagsConfig = () => {
+          return fetch(flagsFallbackApiUrl)
+            .then(response => {
+              if (!response.ok) throw new Error(`Flags API returned status ${response.status}`);
+              return response.json();
+            });
+        };
+
+        const fetchWishlistConfig = () => {
+          return fetch(wishlistFallbackApiUrl)
+            .then(response => {
+              if (!response.ok) throw new Error(`Wishlist API returned status ${response.status}`);
+              return response.json();
+            });
+        };
+
+        const sdkPromise = hasSdkMetafield
+          ? Promise.resolve(metafieldConfigData)
+          : fetchSdkConfig().catch(() => null);
+
+        const preOrderPromise = hasPreOrderMetafield
+          ? Promise.resolve(metafieldPreOrderData)
+          : fetchPreOrderConfig().catch(() => null);
+
+        const flagsPromise = hasFlagsMetafield
+          ? Promise.resolve(metafieldFlagsData)
+          : fetchFlagsConfig().catch(() => null);
+
+        const wishlistPromise = hasWishlistMetafield
+          ? Promise.resolve(metafieldWishlistData)
+          : fetchWishlistConfig().catch(() => null);
+
+        Promise.all([sdkPromise, preOrderPromise, flagsPromise, wishlistPromise])
+          .then(([sdkConfig, preOrderConfig, flagsConfig, wishlistConfig]) => {
+            const trustedDomain = window.Shopify?.shop || window.location.host;
+            const shopDomainParam = searchParams.get('SHOP_DOMAIN');
+            if (window.__nmPreorderEarlyGuard && (!shopDomainParam || shopDomainParam === trustedDomain)) {
+              window.__nmPreorderEarlyGuard.setConfig(preOrderConfig);
+            }
+            window._ReStockConfig.wishlist = wishlistConfig;
+            ensureWishlistPageContainer(sdkConfig);
+            window._ReStockConfig.pre_order = preOrderConfig;
+            window._ReStockConfig.feature_flags = flagsConfig;
+            window._ReStockConfig = { ...window._ReStockConfig, ...sdkConfig };
+            loadSdkScript({ ignoreConditions: !sdkConfig });
+          })
+          .catch(() => loadSdkScript({ ignoreConditions: true }));
+      }
+    }
+    catch (e) {
+      window._ReStockConfig.wishlist = metafieldWishlistData;
+      ensureWishlistPageContainer(metafieldConfigData);
+      window._ReStockConfig.pre_order = metafieldPreOrderData;
+      window._ReStockConfig.feature_flags = metafieldFlagsData;
+      window._ReStockConfig = { ...window._ReStockConfig, ...metafieldConfigData };
+      loadSdkScript({ ignoreConditions: !(metafieldConfigData && metafieldConfigData.shop_id) });
+    }
+  } catch (error) {
+    loadSdkScript({ ignoreConditions: true });
+  }
+})();
