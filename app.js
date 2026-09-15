@@ -20,7 +20,8 @@ import {
     push,
     update,
     remove,
-    onValue
+    onValue,
+    runTransaction
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 import {
@@ -78,7 +79,31 @@ const db =
 
 const storage =
     getStorage(firebaseApp);
+/* =====================================================
+   MM ATTAR INVENTORY FIREBASE CONNECTION
+===================================================== */
 
+const inventoryFirebaseConfig = {
+    apiKey: "AIzaSyAKORse7qtEVb68MUpMMaOA3aacQTa_6Jk",
+    authDomain: "mm-attar-tracker.firebaseapp.com",
+    databaseURL: "https://mm-attar-tracker-default-rtdb.firebaseio.com",
+    projectId: "mm-attar-tracker",
+    storageBucket: "mm-attar-tracker.firebasestorage.app",
+    messagingSenderId: "731890697133",
+    appId: "1:731890697133:web:ed4b2b514c53cd0c0d724",
+    measurementId: "G-T8WR5R3FDX"
+};
+
+const inventoryApp = initializeApp(
+    inventoryFirebaseConfig,
+    "MM_ATTAR_INVENTORY_APP"
+);
+
+const inventoryDb =
+    getDatabase(inventoryApp);
+
+const inventoryRootRef =
+    ref(inventoryDb, "mmAttarInventory");
 
 /* =====================================================
    GLOBAL DATA
@@ -594,247 +619,6 @@ const importedAhmedProducts = [...new Set(
 
 const importedAhmedProductsById = new Map(
     importedAhmedProducts.map(product => [product.id, product])
-);
-
-const importedLocalProducts = [
-    [
-        "ibraheem-al-qureshi-blue-oud",
-        "Ibraheem Al Qurashi Blue Oud Eau De Parfum 100ml For Men & Women",
-        "4_0a33c2b9-e7b8-4d2f-a729-adb3904000c1.png",
-        3749,
-        "100ML"
-    ],
-    [
-        "ibraheem-al-qureshi-musk-kashmir",
-        "Ibraheem Al Qurashi Musk Kashmir Eau De Parfum 100ml For Men & Women",
-        "1_c57162cc-94d8-4dfe-8248-450a5480788f.png",
-        3899,
-        "100ML"
-    ],
-    [
-        "ibraheem-al-qureshi-black-diamond-incense",
-        "Ibraheem Al Qurashi Black Diamond Incense Eau De Parfum 150ml For Men",
-        "9_91ca5755-50e7-49f9-a99d-f1b682a23bc2.png",
-        4449,
-        "150ML"
-    ],
-    [
-        "ibraheem-al-qureshi-sandalwood",
-        "Ibraheem Al Qurashi Sandalwood Eau De Parfum 100ml For Man & Woman",
-        "7_12bc9f08-760c-4648-8615-892bcc201800.png",
-        4749,
-        "100ML"
-    ],
-    [
-        "ibraheem-al-qureshi-tobacco-discovery-set",
-        "Discovery Set Of Ibraheem Al Qurashi Tobacco Collection Eau De Parfum 20ML x 9 For Man",
-        "16_7bb5a775-ea9a-4533-b284-c8bede73a2ed.png",
-        9499,
-        "20ML x 9"
-    ],
-    [
-        "ibraheem-al-qureshi-cullinan-diamond-iris",
-        "Ibraheem Al Qurashi Cullinan Diamond Iris Extrait De Parfum 150ml For Men & Women",
-        "30_7afb6d22-5fd3-4cb9-af92-6334980a3e52.jpg",
-        4999,
-        "150ML"
-    ],
-    [
-        "ibraheem-al-qureshi-blue-diamond-aqua",
-        "Ibraheem Al Qurashi Blue Diamond Aqua Eau De Parfum 150ml For Men",
-        "1_4477d5fd-e500-4581-9a0d-7a143ae8d646.png",
-        5999,
-        "150ML"
-    ],
-    [
-        "ibraheem-al-qureshi-pink-diamond-sakura",
-        "Ibraheem Al Qurashi Pink Diamond Sakura Extrait De Parfum 150ml For Woman",
-        "15_f9b2167c-8575-41ad-88a2-2d09ccbb0d59.png",
-        4999,
-        "150ML"
-    ],
-    [
-        "ibraheem-al-qureshi-brazilian-tobacco",
-        "Ibraheem Al Qurashi Brazilian Tobacco Extrait De Parfum 100ml For Man & Woman",
-        "9_ebd9f57a-82f9-4974-8ba0-29c5eb942b74.png",
-        4499,
-        "100ML"
-    ],
-    [
-        "ibraheem-al-qureshi-dominican-tobacco",
-        "Ibraheem Al Qurashi Dominican Tobacco Extrait De Parfum 100ml For Man & Woman",
-        "30_5e8b7116-f9a3-4a37-b660-a9097f2d5d0f.png",
-        7449,
-        "100ML"
-    ],
-    [
-        "ibraheem-al-qureshi-white-regent-diamond",
-        "Ibraheem Al Qurashi White Regent Diamond Eau De Parfum 150ml For Men & Women",
-        "7_326f575a-3b2d-4c41-836f-4b2d8fe79242.png",
-        6249,
-        "150ML"
-    ],
-    [
-        "ibraheem-al-qureshi-greek-tobacco",
-        "Ibraheem Al Qurashi Greek Tobacco Extrait De Parfum 200ml For Men & Women",
-        "26_1864af5b-3a69-4c3a-855f-bf7505e3da27.png",
-        10249,
-        "200ML"
-    ],
-    [
-        "ibraheem-al-qureshi-french-tobacco",
-        "Ibraheem Al Qurashi French Tobacco Extrait De Parfum 200ml For Men & Women",
-        "Ibraheem_Al_Qurashi_French_Tobacco_Extrait_De_Parfum_200ml_For_Men_Women.jpg",
-        10249,
-        "200ML"
-    ],
-    [
-        "ibraheem-al-qureshi-abaq-pomegranate-musk",
-        "Ibraheem Al Qurashi Abaq Pomegranate Musk Eau De Parfum 75ml For Men & Women",
-        "5_449abf2c-ee0d-49bf-964d-efdcc2d99a5a.png",
-        3499,
-        "75ML"
-    ],
-    [
-        "ibraheem-al-qureshi-vintage-tobacco-gift-set",
-        "Gift Set Of Ibraheem Al Qurashi Vintage Tobacco Extrait De Parfum 100ml For Man",
-        "27_ea35e2b3-5938-4e27-8f72-7135d523b8f7.png",
-        7789,
-        "100ML"
-    ],
-    [
-        "ibraheem-al-qureshi-mexican-tobacco",
-        "Ibraheem Al Qurashi Mexican Tobacco Extrait De Parfum 100ml For Man & Woman",
-        "7_d00962a3-6116-443b-a09e-8ccf60051c4e.png",
-        4449,
-        "100ML"
-    ],
-    [
-        "ibraheem-al-qureshi-black-carbon-diamond",
-        "Ibraheem Al Qurashi Black Carbon Diamond Eau De Parfum 150ml For Men",
-        "2_8212391b-b80b-4429-85a8-465f408c6de3.png",
-        7499,
-        "150ML"
-    ],
-    [
-        "ibraheem-al-qureshi-dark-lavender",
-        "Ibraheem Al Qurashi Dark Lavender Eau De Parfum For Man & Woman",
-        "11_88875dc3-077a-439d-81d6-83a45d901f7b.png",
-        3699,
-        "100ML"
-    ],
-    [
-        "ibraheem-al-qureshi-emerald-soul-diamond",
-        "Ibraheem Al Qurashi Emerald Soul Diamond Eau De Parfum 150ml For Men & Women",
-        "3_87793e1e-e59f-4c7d-b6ec-f4550b7ebcb0.png",
-        6999,
-        "150ML"
-    ],
-    [
-        "ibraheem-al-qureshi-grey-pearl-diamond",
-        "Ibraheem Al Qurashi Grey Pearl Diamond Eau De Parfum 200ml For Men & Women",
-        "4_f7bd12d7-fa96-469f-9177-5e90251d6de5.png",
-        8499,
-        "200ML"
-    ],
-    [
-        "ibraheem-al-qureshi-iconic-oudh-tobacco",
-        "Ibraheem Al Qurashi Iconic Oudh Tobacco Eau De Parfum 100ml For Man & Woman",
-        "15_17b4b8e9-ea8c-40fe-8b34-cbdeb195e5e3.png",
-        7499,
-        "100ML"
-    ],
-    [
-        "ibraheem-al-qureshi-golden-amber",
-        "Ibraheem Al Qurashi Golden Amber Eau De Parfum 100ml For Men & Women",
-        "28_2f051e7d-e812-45b2-b26e-322035535aee.jpg",
-        4499,
-        "100ML"
-    ],
-    [
-        "ibraheem-al-qureshi-arabian-tobacco",
-        "Ibraheem Al Qurashi Arabian Tobacco Extrait De Parfum 100ml For Man & Woman",
-        "8_bbabdc6e-9ee9-4562-acb3-f9063d068561.png",
-        6349,
-        "100ML"
-    ],
-    [
-        "ibraheem-al-qureshi-malayan-lthr",
-        "Ibraheem Al Qurashi Malayan Lthr Eau De Parfum 75ml For Men & Women",
-        "11_c30324ac-799e-488e-b0cd-a2f8cad0e866.png",
-        3249,
-        "75ML"
-    ],
-    [
-        "ibraheem-al-qureshi-manta-lthr",
-        "Ibraheem Al Qurashi Manta LTHR Eau De Parfum 75ml For Men & Women",
-        "12_63bbf495-6f82-4319-a6d5-91cfe8f6ded8.png",
-        3249,
-        "75ML"
-    ],
-    [
-        "ibraheem-al-qureshi-riviera-sunset",
-        "Ibraheem Al Qurashi Riviera Sunset Eau De Parfum 100ml For Man & Woman",
-        "23_03ee7e31-1eb4-438c-9915-fc70ac52e73e.png",
-        3649,
-        "100ML"
-    ],
-    [
-        "ajmal-cyan-oud",
-        "Ajmal Cyan Oud Eau de Parfum 100ml",
-        "Ajmal-Cyan-Oud.jpg",
-        2299,
-        "100ML"
-    ],
-    [
-        "ajmal-white-oud",
-        "Ajmal White Oud Eau de Parfum 100ml",
-        "Ajmal-White-Oud.jpg",
-        1599,
-        "100ML"
-    ],
-    [
-        "ajmal-oud-nirvana",
-        "Ajmal Oud Nirvana Eau De Parfum 100ml",
-        "Ajmal-Oud-Nirvana.jpg",
-        1599,
-        "100ML"
-    ],
-    [
-        "ajmal-amber-wood",
-        "Ajmal Amber Wood Eau De Parfum 100ml",
-        "Ajmal-Amber-Wood.jpg",
-        11799,
-        "100ML"
-    ],
-    [
-        "ajmal-wave",
-        "Ajmal Wave Eau de Parfum for Men 100ml",
-        "Ajmal-Wave.jpg",
-        1399,
-        "100ML"
-    ]
-].map(([id, name, image, price, size]) => ({
-    id,
-    name,
-    category: "perfume",
-    brand: id.startsWith("ajmal-") ? "AJMAL" : "IBRAHEEM AL QURESHI",
-    image: id.startsWith("ajmal-")
-        ? `./Ajmal Cyan Oud Eau de Parfum 100ml – Perfumegyaan_files/${image}`
-        : `./Ibraheem Al Qurashi _ Perfume Palace_files/${image}`,
-    images: [id.startsWith("ajmal-")
-        ? `./Ajmal Cyan Oud Eau de Parfum 100ml – Perfumegyaan_files/${image}`
-        : `./Ibraheem Al Qurashi _ Perfume Palace_files/${image}`],
-    description: `${name} sourced from the official online listing.`,
-    notes: "Premium fragrance",
-    sizes: [{ name: size, price }],
-    stock: 20,
-    rating: 4.8,
-    enabled: true
-}));
-
-const importedLocalProductsById = new Map(
-    importedLocalProducts.map(product => [product.id, product])
 );
 
 const $ = id =>
@@ -2489,28 +2273,54 @@ function addToCart(
 
 
         existing.quantity += quantity;
+existing.ml =
+    getSizeML(existing.size);
 
+existing.brand =
+    existing.brand ||
+    product.brand ||
+    "";
+
+existing.inventoryStockId =
+    existing.inventoryStockId ||
+    product.inventoryStockId ||
+    product.inventoryId ||
+    "";
     }
 
     else {
 
-        cart.push({
+       cart.push({
 
-            productId: product.id,
+    productId: product.id,
 
-            name: product.name,
+    name: product.name,
 
-            category: product.category,
+    category: product.category,
 
-            image: product.image,
+    brand:
+        product.brand || "",
 
-            size: size.name,
+    image:
+        product.image,
 
-            price: Number(size.price),
+    size:
+        size.name,
 
-            quantity
+    ml:
+        getSizeML(size.name),
 
-        });
+    inventoryStockId:
+        product.inventoryStockId ||
+        product.inventoryId ||
+        "",
+
+    price:
+        Number(size.price),
+
+    quantity
+
+});
 
     }
 
@@ -3072,7 +2882,757 @@ function showPaymentInfo() {
 
 window.showPaymentInfo =
     showPaymentInfo;
+/* =====================================================
+   WEBSITE → INVENTORY HELPERS
+===================================================== */
 
+function normalizeInventoryText(value) {
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function getSizeML(size) {
+    const match = String(size || "")
+        .toUpperCase()
+        .replace(/\s+/g, "")
+        .match(/(\d+(?:\.\d+)?)ML/);
+
+    return match ? Number(match[1]) : 0;
+}
+
+function findMatchingInventoryStock(stocks, item) {
+    if (!Array.isArray(stocks)) return null;
+
+    const productName =
+        normalizeInventoryText(item.name);
+
+    const brandName =
+        normalizeInventoryText(item.brand);
+
+    if (item.inventoryStockId) {
+        const exactId =
+            stocks.find(stock =>
+                String(stock.id) ===
+                String(item.inventoryStockId)
+            );
+
+        if (exactId) return exactId;
+    }
+
+    const exactMatch =
+        stocks.find(stock => {
+
+            const stockName =
+                normalizeInventoryText(
+                    stock.name ||
+                    stock.productName ||
+                    stock.attarName ||
+                    stock.perfumeName
+                );
+
+            const stockBrand =
+                normalizeInventoryText(
+                    stock.brand
+                );
+
+            return (
+                stockName === productName &&
+                (
+                    !brandName ||
+                    !stockBrand ||
+                    stockBrand === brandName
+                )
+            );
+        });
+
+    if (exactMatch)
+        return exactMatch;
+
+    const sameName =
+        stocks.filter(stock => {
+
+            const stockName =
+                normalizeInventoryText(
+                    stock.name ||
+                    stock.productName ||
+                    stock.attarName ||
+                    stock.perfumeName
+                );
+
+            return stockName === productName;
+        });
+
+    return sameName.length === 1
+        ? sameName[0]
+        : null;
+}
+
+
+function inventoryPayment(
+    total,
+    paid = 0
+) {
+    total = Number(total || 0);
+
+    paid = Math.max(
+        0,
+        Math.min(
+            Number(paid || 0),
+            total
+        )
+    );
+
+    const due =
+        Math.max(
+            0,
+            total - paid
+        );
+
+    return {
+        paid,
+        due,
+        status:
+            due <= 0 && total > 0
+                ? "Paid"
+                : paid > 0
+                    ? "Partial"
+                    : "Pending"
+    };
+}
+
+
+/* =====================================================
+   WEBSITE ORDER → INVENTORY
+===================================================== */
+
+async function syncWebsiteOrderToInventory(order) {
+
+    if (
+        !order?.orderId ||
+        !Array.isArray(order.items) ||
+        !order.items.length
+    ) {
+        throw new Error(
+            "Invalid order for inventory synchronization."
+        );
+    }
+
+    const result =
+        await runTransaction(
+            inventoryRootRef,
+            currentData => {
+
+                const data =
+                    currentData &&
+                    typeof currentData === "object"
+                        ? currentData
+                        : {};
+
+                const stocks =
+                    Array.isArray(data.stocks)
+                        ? data.stocks.map(
+                            stock => ({
+                                ...stock
+                            })
+                        )
+                        : [];
+
+                const sales =
+                    Array.isArray(data.sales)
+                        ? data.sales.map(
+                            sale => ({
+                                ...sale
+                            })
+                        )
+                        : [];
+
+
+                const duplicate =
+                    sales.some(sale =>
+                        String(
+                            sale.orderId || ""
+                        ) ===
+                        String(
+                            order.orderId
+                        ) &&
+                        String(
+                            sale.source || ""
+                        ).toLowerCase() ===
+                        "website" &&
+                        sale.inventoryRestored !== true
+                    );
+
+
+                if (duplicate)
+                    return data;
+
+
+                const operations = [];
+
+
+                for (const item of order.items) {
+
+                    const stock =
+                        findMatchingInventoryStock(
+                            stocks,
+                            item
+                        );
+
+
+                    if (!stock) {
+
+                        throw new Error(
+                            `Inventory product not found: ${item.name}`
+                        );
+                    }
+
+
+                    const ml =
+                        getSizeML(item.size);
+
+                    const quantity =
+                        Math.max(
+                            1,
+                            Number(
+                                item.quantity || 1
+                            )
+                        );
+
+                    const mlSold =
+                        ml * quantity;
+
+                    const availableML =
+                        Number(
+                            stock.totalML || 0
+                        );
+
+
+                    if (mlSold <= 0) {
+
+                        throw new Error(
+                            `Invalid ML size for: ${item.name}`
+                        );
+                    }
+
+
+                    if (
+                        availableML <
+                        mlSold
+                    ) {
+
+                        throw new Error(
+                            `${item.name}: only ${availableML} ML available, but ${mlSold} ML requested.`
+                        );
+                    }
+
+
+                    operations.push({
+
+                        item,
+
+                        stockId:
+                            stock.id,
+
+                        beforeML:
+                            availableML,
+
+                        mlSold,
+
+                        afterML:
+                            availableML -
+                            mlSold
+
+                    });
+                }
+
+
+                const paidInfo =
+                    inventoryPayment(
+                        Number(
+                            order.total || 0
+                        ),
+                        Number(
+                            order.paidAmount || 0
+                        )
+                    );
+
+
+                operations.forEach(
+                    operation => {
+
+                        const stock =
+                            stocks.find(
+                                s =>
+                                    String(s.id) ===
+                                    String(
+                                        operation.stockId
+                                    )
+                            );
+
+
+                        if (!stock) {
+
+                            throw new Error(
+                                "Inventory stock changed unexpectedly."
+                            );
+                        }
+
+
+                        stock.totalML =
+                            operation.afterML;
+
+
+                        if (
+                            !Array.isArray(
+                                stock.movements
+                            )
+                        ) {
+
+                            stock.movements = [];
+                        }
+
+
+                        stock.movements.push({
+
+                            id:
+                                `WEB-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+
+                            type:
+                                "sale",
+
+                            orderId:
+                                order.orderId,
+
+                            source:
+                                "website",
+
+                            ml:
+                                operation.mlSold,
+
+                            beforeML:
+                                operation.beforeML,
+
+                            afterML:
+                                operation.afterML,
+
+                            date:
+                                new Date().toISOString(),
+
+                            note:
+                                "MM ATTAR Website Order"
+                        });
+                    }
+                );
+
+
+                operations.forEach(
+                    (
+                        operation,
+                        index
+                    ) => {
+
+                        const item =
+                            operation.item;
+
+                        const lineTotal =
+                            Number(
+                                item.price || 0
+                            ) *
+                            Number(
+                                item.quantity || 1
+                            );
+
+
+                        const linePaid =
+                            index === 0
+                                ? paidInfo.paid
+                                : 0;
+
+
+                        const linePayment =
+                            inventoryPayment(
+                                lineTotal,
+                                linePaid
+                            );
+
+
+                        sales.push({
+
+                            id:
+                                `WEB-SALE-${Date.now()}-${index}-${Math.random().toString(36).slice(2, 8)}`,
+
+                            orderId:
+                                order.orderId,
+
+                            orderNumber:
+                                order.orderId,
+
+                            source:
+                                "website",
+
+                            inventorySynced:
+                                true,
+
+                            inventoryRestored:
+                                false,
+
+                            stockId:
+                                operation.stockId,
+
+                            customer:
+                                order.customer?.name ||
+                                "",
+
+                            mobile:
+                                order.customer?.phone ||
+                                "",
+
+                            date:
+                                new Date()
+                                    .toISOString()
+                                    .slice(
+                                        0,
+                                        10
+                                    ),
+
+                            attarName:
+                                item.name,
+
+                            productName:
+                                item.name,
+
+                            brand:
+                                item.brand || "",
+
+                            ml:
+                                operation.mlSold,
+
+                            quantity:
+                                Number(
+                                    item.quantity || 1
+                                ),
+
+                            size:
+                                item.size || "",
+
+                            totalAmount:
+                                lineTotal,
+
+                            totalBill:
+                                lineTotal,
+
+                            paidAmount:
+                                linePaid,
+
+                            paid:
+                                linePaid,
+
+                            dueAmount:
+                                linePayment.due,
+
+                            paymentStatus:
+                                linePayment.status,
+
+                            paymentType:
+                                order.paymentMethod ||
+                                "",
+
+                            orderStatus:
+                                order.orderStatus ||
+                                "Order Received",
+
+                            notes:
+                                "Website Order - MM ATTAR"
+
+                        });
+                    }
+                );
+
+
+                return {
+                    ...data,
+
+                    stocks,
+
+                    sales
+                };
+            }
+        );
+
+
+    return Boolean(
+        result.committed
+    );
+}
+
+
+/* =====================================================
+   UPDATE INVENTORY ORDER STATUS
+===================================================== */
+
+async function updateInventoryOrderStatus(
+    orderId,
+    status
+) {
+
+    if (!orderId)
+        return;
+
+
+    await runTransaction(
+        inventoryRootRef,
+        currentData => {
+
+            if (
+                !currentData ||
+                typeof currentData !==
+                "object"
+            ) {
+                return currentData;
+            }
+
+
+            const sales =
+                Array.isArray(
+                    currentData.sales
+                )
+                    ? currentData.sales.map(
+                        sale => ({
+                            ...sale
+                        })
+                    )
+                    : [];
+
+
+            let changed = false;
+
+
+            sales.forEach(
+                sale => {
+
+                    if (
+                        String(
+                            sale.orderId || ""
+                        ) ===
+                        String(orderId) &&
+                        String(
+                            sale.source || ""
+                        ).toLowerCase() ===
+                        "website"
+                    ) {
+
+                        sale.orderStatus =
+                            status;
+
+                        changed = true;
+                    }
+                }
+            );
+
+
+            return changed
+                ? {
+                    ...currentData,
+                    sales
+                }
+                : currentData;
+        }
+    );
+}
+
+
+/* =====================================================
+   RESTORE INVENTORY WHEN ORDER CANCELLED
+===================================================== */
+
+async function restoreInventoryForCancelledOrder(
+    orderId
+) {
+
+    if (!orderId)
+        return false;
+
+
+    const result =
+        await runTransaction(
+            inventoryRootRef,
+            currentData => {
+
+                if (
+                    !currentData ||
+                    typeof currentData !==
+                    "object"
+                ) {
+                    return currentData;
+                }
+
+
+                const stocks =
+                    Array.isArray(
+                        currentData.stocks
+                    )
+                        ? currentData.stocks.map(
+                            stock => ({
+                                ...stock
+                            })
+                        )
+                        : [];
+
+
+                const sales =
+                    Array.isArray(
+                        currentData.sales
+                    )
+                        ? currentData.sales.map(
+                            sale => ({
+                                ...sale
+                            })
+                        )
+                        : [];
+
+
+                const matchingSales =
+                    sales.filter(
+                        sale =>
+                            String(
+                                sale.orderId || ""
+                            ) ===
+                            String(orderId) &&
+                            String(
+                                sale.source || ""
+                            ).toLowerCase() ===
+                            "website"
+                    );
+
+
+                if (!matchingSales.length)
+                    return currentData;
+
+
+                let changed = false;
+
+
+                for (
+                    const sale of matchingSales
+                ) {
+
+                    if (
+                        sale.inventoryRestored ===
+                        true
+                    ) {
+                        continue;
+                    }
+
+
+                    const stock =
+                        stocks.find(
+                            s =>
+                                String(s.id) ===
+                                String(
+                                    sale.stockId
+                                )
+                        );
+
+
+                    if (!stock) {
+
+                        throw new Error(
+                            `Inventory stock not found while cancelling ${orderId}.`
+                        );
+                    }
+
+
+                    const restoreML =
+                        Number(
+                            sale.ml || 0
+                        );
+
+
+                    const beforeML =
+                        Number(
+                            stock.totalML || 0
+                        );
+
+
+                    const afterML =
+                        beforeML +
+                        restoreML;
+
+
+                    stock.totalML =
+                        afterML;
+
+
+                    if (
+                        !Array.isArray(
+                            stock.movements
+                        )
+                    ) {
+
+                        stock.movements =
+                            [];
+                    }
+
+
+                    stock.movements.push({
+
+                        id:
+                            `WEB-RESTORE-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+
+                        type:
+                            "sale-restore",
+
+                        orderId,
+
+                        source:
+                            "website",
+
+                        ml:
+                            restoreML,
+
+                        beforeML,
+
+                        afterML,
+
+                        date:
+                            new Date().toISOString(),
+
+                        note:
+                            "MM ATTAR Website Order Cancelled"
+                    });
+
+
+                    sale.inventoryRestored =
+                        true;
+
+                    sale.orderStatus =
+                        "Cancelled";
+
+
+                    changed =
+                        true;
+                }
+
+
+                return changed
+                    ? {
+                        ...currentData,
+                        stocks,
+                        sales
+                    }
+                    : currentData;
+            }
+        );
+
+
+    return Boolean(
+        result.committed
+    );
+}
 
 /* =====================================================
    PLACE ORDER
@@ -3198,6 +3758,11 @@ async function placeOrder() {
 
             size:
                 item.size,
+                ml:
+                  getSizeML(item.size),
+                inventoryStockId:
+                    item.inventoryStockId || "",
+
 
             quantity:
                 Number(item.quantity),
@@ -3294,44 +3859,34 @@ async function placeOrder() {
           Update stock
         */
 
-        for (const item of cart) {
+       try {
 
-            const product =
-                products.find(
-                    p =>
-                        p.id === item.productId
-                );
+    await syncWebsiteOrderToInventory(
+        order
+    );
 
+} catch (inventoryError) {
 
-            if (!product)
-                continue;
+    console.error(
+        "Inventory synchronization failed:",
+        inventoryError
+    );
 
+    await remove(
+        ref(
+            db,
+            "orders/" +
+            orderId
+        )
+    );
 
-            const newStock =
-                Math.max(
-                    0,
-                    Number(product.stock || 0) -
-                    Number(item.quantity)
-                );
+    showToast(
+        inventoryError.message ||
+        "Inventory could not be updated. Order was not completed."
+    );
 
-
-            await update(
-                ref(
-                    db,
-                    "products/" +
-                    product.id
-                ),
-                {
-                    stock: newStock
-                }
-            );
-
-
-            product.stock =
-                newStock;
-
-        }
-
+    return;
+}
 
         /*
           Save customer address
@@ -4565,17 +5120,18 @@ window.renderAdminOrders =
 /* =====================================================
    UPDATE ORDER STATUS
 ===================================================== */
-
 async function updateOrderStatus(
     orderId,
     status
 ) {
-
     if (!isAdmin)
         return;
 
-
     try {
+
+        // ------------------------------------------
+        // 1. Update Website Order Status
+        // ------------------------------------------
 
         await update(
             ref(
@@ -4585,27 +5141,48 @@ async function updateOrderStatus(
             ),
             {
                 orderStatus: status,
-
                 updatedAt: Date.now()
             }
         );
 
 
-        showToast(
-            "Order status updated."
-        );
+        // ------------------------------------------
+        // 2. Sync status with Inventory
+        // ------------------------------------------
 
+        if (status === "Cancelled") {
+
+            await restoreInventoryForCancelledOrder(
+                orderId
+            );
+
+        } else {
+
+            await updateInventoryOrderStatus(
+                orderId,
+                status
+            );
+
+        }
+
+
+        showToast(
+            "Order status and inventory updated."
+        );
 
     }
 
-    catch {
+    catch (error) {
 
-        showToast(
-            "Could not update status."
+        console.error(
+            "Order status update failed:",
+            error
         );
 
+        showToast(
+            "Could not update order/inventory status."
+        );
     }
-
 }
 
 
