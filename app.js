@@ -2913,18 +2913,67 @@ function findMatchingInventoryStock(stocks, item) {
     const brandName =
         normalizeInventoryText(item.brand);
 
+    // 1. Exact inventory ID match
     if (item.inventoryStockId) {
-        const exactId =
-            stocks.find(stock =>
-                String(stock.id) ===
-                String(item.inventoryStockId)
-            );
+        const exactId = stocks.find(stock =>
+            String(stock.id) ===
+            String(item.inventoryStockId)
+        );
 
         if (exactId) return exactId;
     }
 
-    const exactMatch =
-        stocks.find(stock => {
+    // 2. Exact product + brand match
+    const exactMatch = stocks.find(stock => {
+
+        const stockName =
+            normalizeInventoryText(
+                stock.name ||
+                stock.productName ||
+                stock.attarName ||
+                stock.perfumeName
+            );
+
+        const stockBrand =
+            normalizeInventoryText(
+                stock.brand
+            );
+
+        return (
+            stockName === productName &&
+            (
+                !brandName ||
+                !stockBrand ||
+                stockBrand === brandName
+            )
+        );
+    });
+
+    if (exactMatch) return exactMatch;
+
+
+    // 3. Known product name variations
+    const aliases = {
+        "musk rizali": [
+            "musk rizal",
+            "musk rizali"
+        ],
+
+        "musk rizal": [
+            "musk rizal",
+            "musk rizali"
+        ]
+    };
+
+    const possibleNames =
+        aliases[productName] || [
+            productName
+        ];
+
+
+    // 4. Match one unique alias
+    const aliasMatches =
+        stocks.filter(stock => {
 
             const stockName =
                 normalizeInventoryText(
@@ -2940,7 +2989,7 @@ function findMatchingInventoryStock(stocks, item) {
                 );
 
             return (
-                stockName === productName &&
+                possibleNames.includes(stockName) &&
                 (
                     !brandName ||
                     !stockBrand ||
@@ -2949,9 +2998,14 @@ function findMatchingInventoryStock(stocks, item) {
             );
         });
 
-    if (exactMatch)
-        return exactMatch;
 
+    if (aliasMatches.length === 1) {
+        return aliasMatches[0];
+    }
+
+
+    // 5. Safe fallback:
+    // same name only when exactly one exists
     const sameName =
         stocks.filter(stock => {
 
@@ -2966,9 +3020,14 @@ function findMatchingInventoryStock(stocks, item) {
             return stockName === productName;
         });
 
-    return sameName.length === 1
-        ? sameName[0]
-        : null;
+
+    if (sameName.length === 1) {
+        return sameName[0];
+    }
+
+
+    // Never choose randomly
+    return null;
 }
 
 
@@ -3443,7 +3502,123 @@ async function updateInventoryOrderStatus(
         }
     );
 }
+/* =====================================================
+   WATCH INVENTORY DELETIONS
+   Inventory sale delete થાય તો website order પણ delete
+===================================================== */
 
+async function watchInventoryDeletions() {
+
+    onValue(
+        inventoryRootRef,
+        async snapshot => {
+
+            if (!snapshot.exists())
+                return;
+
+            const remote =
+                snapshot.val() || {};
+
+            const sales =
+                Array.isArray(remote.sales)
+                    ? remote.sales
+                    : [];
+
+            try {
+
+                const indexSnapshot =
+                    await get(
+                        ref(
+                            db,
+                            "websiteInventoryOrders"
+                        )
+                    );
+
+                if (!indexSnapshot.exists())
+                    return;
+
+                const knownOrders =
+                    indexSnapshot.val() || {};
+
+                const activeOrderIds =
+                    new Set(
+                        sales
+                            .filter(sale =>
+                                String(
+                                    sale.source || ""
+                                ).toLowerCase() ===
+                                "website"
+                            )
+                            .map(sale =>
+                                String(
+                                    sale.orderId || ""
+                                )
+                            )
+                            .filter(Boolean)
+                    );
+
+                for (
+                    const orderId
+                    of Object.keys(knownOrders)
+                ) {
+
+                    if (
+                        activeOrderIds.has(
+                            String(orderId)
+                        )
+                    ) {
+                        continue;
+                    }
+
+                    const orderSnapshot =
+                        await get(
+                            ref(
+                                db,
+                                `orders/${orderId}`
+                            )
+                        );
+
+                    if (
+                        orderSnapshot.exists()
+                    ) {
+
+                        await remove(
+                            ref(
+                                db,
+                                `orders/${orderId}`
+                            )
+                        );
+                    }
+
+                    await remove(
+                        ref(
+                            db,
+                            `websiteInventoryOrders/${orderId}`
+                        )
+                    );
+                }
+
+            } catch (error) {
+
+                console.warn(
+                    "Inventory deletion watcher failed:",
+                    error
+                );
+            }
+        },
+
+        error => {
+
+            console.warn(
+                "Inventory realtime sync unavailable:",
+                error
+            );
+        }
+    );
+}
+
+
+watchInventoryDeletions();
 
 /* =====================================================
    RESTORE INVENTORY WHEN ORDER CANCELLED
@@ -5072,19 +5247,25 @@ async function renderAdminOrders() {
 
 
                                     <td>
+<button
+    class="admin-action"
+    onclick="
+        viewAdminOrder(
+            '${order.orderId}'
+        )
+    ">
+    View
+</button>
 
-                                        <button
-                                            class="admin-action"
-                                            onclick="
-                                                viewAdminOrder(
-                                                    '${order.orderId}'
-                                                )
-                                            ">
-
-                                            View
-
-                                        </button>
-
+        <button
+         class="remove-btn"
+            onclick="
+            deleteWebsiteOrder(
+            '${order.orderId}'
+        )
+    ">
+           Delete      
+</button>
                                     </td>
 
                                 </tr>
@@ -5189,7 +5370,295 @@ async function updateOrderStatus(
 window.updateOrderStatus =
     updateOrderStatus;
 
+/* =====================================================
+   DELETE WEBSITE ORDER + INVENTORY SYNC
+===================================================== */
 
+async function deleteWebsiteOrder(orderId) {
+
+    if (!isAdmin)
+        return;
+
+    if (!orderId)
+        return;
+
+    const confirmed =
+        confirm(
+            `Delete order ${orderId}?\n\n` +
+            `This will also remove the linked website sale from Inventory and restore the sold ML.`
+        );
+
+    if (!confirmed)
+        return;
+
+
+    try {
+
+        // ------------------------------------------------
+        // 1. Check website order exists
+        // ------------------------------------------------
+
+        const orderSnapshot =
+            await get(
+                ref(
+                    db,
+                    "orders/" +
+                    orderId
+                )
+            );
+
+
+        if (!orderSnapshot.exists()) {
+
+            showToast(
+                "Website order not found."
+            );
+
+            return;
+        }
+
+
+        // ------------------------------------------------
+        // 2. Remove linked inventory sales safely
+        //    and restore ML only once
+        // ------------------------------------------------
+
+        await runTransaction(
+            inventoryRootRef,
+            currentData => {
+
+                if (
+                    !currentData ||
+                    typeof currentData !==
+                    "object"
+                ) {
+                    return currentData;
+                }
+
+
+                const stocks =
+                    Array.isArray(
+                        currentData.stocks
+                    )
+                        ? currentData.stocks.map(
+                            stock => ({
+                                ...stock
+                            })
+                        )
+                        : [];
+
+
+                const sales =
+                    Array.isArray(
+                        currentData.sales
+                    )
+                        ? currentData.sales.map(
+                            sale => ({
+                                ...sale
+                            })
+                        )
+                        : [];
+
+
+                const linkedSales =
+                    sales.filter(
+                        sale =>
+                            String(
+                                sale.orderId || ""
+                            ) ===
+                            String(orderId) &&
+                            String(
+                                sale.source || ""
+                            ).toLowerCase() ===
+                            "website"
+                    );
+
+
+                if (!linkedSales.length) {
+
+                    // Website order can still
+                    // be deleted even if no
+                    // inventory sale exists.
+
+                    return currentData;
+                }
+
+
+                // ----------------------------------------
+                // Restore ML only when not already restored
+                // ----------------------------------------
+
+                for (
+                    const sale of linkedSales
+                ) {
+
+                    if (
+                        sale.inventoryRestored ===
+                        true
+                    ) {
+                        continue;
+                    }
+
+
+                    const stock =
+                        stocks.find(
+                            s =>
+                                String(
+                                    s.id
+                                ) ===
+                                String(
+                                    sale.stockId
+                                )
+                        );
+
+
+                    if (!stock) {
+
+                        throw new Error(
+                            `Inventory stock not found for ${sale.attarName || sale.productName || "product"}.`
+                        );
+                    }
+
+
+                    const restoreML =
+                        Number(
+                            sale.ml || 0
+                        );
+
+
+                    const beforeML =
+                        Number(
+                            stock.totalML || 0
+                        );
+
+
+                    const afterML =
+                        beforeML +
+                        restoreML;
+
+
+                    stock.totalML =
+                        afterML;
+
+
+                    if (
+                        !Array.isArray(
+                            stock.movements
+                        )
+                    ) {
+
+                        stock.movements = [];
+                    }
+
+
+                    stock.movements.push({
+
+                        id:
+                            `WEB-DELETE-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+
+                        type:
+                            "sale-delete-restore",
+
+                        orderId:
+
+                            orderId,
+
+                        source:
+                            "website",
+
+                        ml:
+                            restoreML,
+
+                        beforeML,
+
+                        afterML,
+
+                        date:
+                            new Date().toISOString(),
+
+                        note:
+                            "Website Order Deleted"
+                    });
+                }
+
+
+                // ----------------------------------------
+                // Remove ONLY website sales for this order
+                // ----------------------------------------
+
+                const remainingSales =
+                    sales.filter(
+                        sale =>
+                            !(
+                                String(
+                                    sale.orderId || ""
+                                ) ===
+                                String(orderId) &&
+                                String(
+                                    sale.source || ""
+                                ).toLowerCase() ===
+                                "website"
+                            )
+                    );
+
+
+                return {
+
+                    ...currentData,
+
+                    stocks,
+
+                    sales:
+                        remainingSales
+
+                };
+            }
+        );
+
+
+        // ------------------------------------------------
+        // 3. Delete order from Website Firebase
+        // ------------------------------------------------
+
+        await remove(
+            ref(
+                db,
+                "orders/" +
+                orderId
+            )
+        );
+
+
+        // ------------------------------------------------
+        // 4. Refresh Admin Orders
+        // ------------------------------------------------
+
+        await renderAdminOrders();
+
+
+        showToast(
+            "Order deleted and Inventory synchronized."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Delete order failed:",
+            error
+        );
+
+        showToast(
+            error.message ||
+            "Could not delete order."
+        );
+    }
+}
+
+
+window.deleteWebsiteOrder =
+    deleteWebsiteOrder;
 /* =====================================================
    VIEW ORDER
 ===================================================== */
